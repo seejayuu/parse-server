@@ -538,9 +538,9 @@ class Schema {
 
             // for non-relations, remove all the data.
             // This is necessary to ensure that the data is still gone if they add the same field.
-            let unsafeDB = database.Unsafe();
-            let transformFieldName = unsafeDB.transform.transformKey(this, className, fieldName);
-            return unsafeDB.update(className, {}, {[transformFieldName]: {__op: 'Delete'}}, {many: true});
+            let db = database.WithoutValidation();
+            let transformFieldName = db.transform.transformKey(this, className, fieldName);
+            return db.update(className, {}, {[transformFieldName]: {__op: 'Delete'}}, {many: true});
           })
           // Save the _SCHEMA object
           .then(() => this._collection.updateSchema(className, { $unset: { [fieldName]: null } }));

@@ -11,7 +11,7 @@ const deepcopy = require('deepcopy');
 
 // options can contain:
 //   collectionPrefix: the string to put in front of every collection name.
-function DatabaseController(adapter, { collectionPrefix, unsafe } = {}) {
+function DatabaseController(adapter, { collectionPrefix, skipValidation } = {}) {
   this.adapter = adapter;
 
   this.collectionPrefix = collectionPrefix;
@@ -20,7 +20,7 @@ function DatabaseController(adapter, { collectionPrefix, unsafe } = {}) {
   // one request that uses different schemas for different parts of
   // it. Instead, use loadSchema to get a schema.
   this.schemaPromise = null;
-  this.unsafe = !!unsafe;
+  this.skipValidation = !!skipValidation;
   this.connect();
 
   Object.defineProperty(this, 'transform', {
@@ -30,8 +30,8 @@ function DatabaseController(adapter, { collectionPrefix, unsafe } = {}) {
   })
 }
 
-DatabaseController.prototype.Unsafe = function() {
-  return new DatabaseController(this.adapter, {collectionPrefix: this.collectionPrefix, unsafe: true});
+DatabaseController.prototype.WithoutValidation = function() {
+  return new DatabaseController(this.adapter, {collectionPrefix: this.collectionPrefix, skipValidation: true});
 }
 
 // Connects to the database. Returns a promise that resolves when the
@@ -61,7 +61,7 @@ function returnsTrue() {
 }
 
 DatabaseController.prototype.validateClassName = function(className) {
-  if (this.unsafe) {
+  if (this.skipValidation) {
     return Promise.resolve();
   }
   if (!Schema.classNameIsValid(className)) {
@@ -179,11 +179,11 @@ DatabaseController.prototype.update = function(className, query, update, options
     .then(() => this.handleRelationUpdates(className, query.objectId, update))
     .then(() => adaptiveCollection(this, className))
     .then(collection => {
-      var mongoWhere = this.transform.transformWhere(schema, className, query, {validate: !this.unsafe});
+      var mongoWhere = this.transform.transformWhere(schema, className, query, {validate: !this.skipValidation});
       if (options.acl) {
         mongoWhere = this.transform.addWriteACL(mongoWhere, options.acl);
       }
-      mongoUpdate = this.transform.transformUpdate(schema, className, update, {validate: !this.unsafe});
+      mongoUpdate = this.transform.transformUpdate(schema, className, update, {validate: !this.skipValidation});
       if (options.many) {
         return collection.updateMany(mongoWhere, mongoUpdate);
       }else if (options.upsert) {
@@ -197,7 +197,7 @@ DatabaseController.prototype.update = function(className, query, update, options
         return Promise.reject(new Parse.Error(Parse.Error.OBJECT_NOT_FOUND,
           'Object not found.'));
       }
-      if (this.unsafe) {
+      if (this.skipValidation) {
         return Promise.resolve(result);
       }
       return sanitizeDatabaseResult(originalUpdate, result);
@@ -319,7 +319,7 @@ DatabaseController.prototype.destroy = function(className, query, options = {}) 
     })
     .then(() => adaptiveCollection(this, className))
     .then(collection => {
-      let mongoWhere = this.transform.transformWhere(schema, className, query, {validate: !this.unsafe});
+      let mongoWhere = this.transform.transformWhere(schema, className, query, {validate: !this.skipValidation});
       if (options.acl) {
         mongoWhere = this.transform.addWriteACL(mongoWhere, options.acl);
       }
