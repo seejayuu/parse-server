@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	    <!-- Meta, title, CSS, favicons, etc. -->
+	    <meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<meta name="author" content="">
+	
+		<title>
+		  
+		    Poppo
+		  
+		</title>
+	
+	<!-- Canvas Resize -->
+    <script type="text/javascript">
+        function resize_canvas(){
+            canvas = document.getElementById("canvas");
+            if (canvas.width  < window.innerWidth)
+            {
+                canvas.width  = window.innerWidth;
+            }
+
+            if (canvas.height < window.innerHeight)
+            {
+                canvas.height = window.innerHeight;
+            }
+        }
+        function validateEmail(email) {
+          var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return re.test(email);
+        }
+    </script>
+
+	<!--  core CSS -->
+		<link href="/css/bootstrap.min.css" rel="stylesheet">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+		<!-- Fonts -->
+		<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,700,400italic,700italic' rel='stylesheet' type='text/css'>
+		
+		<!-- Rocket extras -->
+		<link href="/css/animate.css" rel="stylesheet">
+		<link href="/css/prettyPhoto.css" rel="stylesheet">
+		<link href="/css/style.css" rel="stylesheet">
+		<!--[if lt IE 9]><script src="assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+		
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+		  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		  <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+		<![endif]-->
+		
+		<!-- Favicons -->
+		<link rel="shortcut icon" href="/assets/favicon.ico">
+		<script src='https://www.google.com/recaptcha/api.js'></script>
+	</head>
+	<body onresize="resize_canvas()">
+
+	<!-- ==============Start Download Popup=================== 
+		 moved modal directly under <body> so it's not part of elements with special z-index-->
+	<div class="modal fade" id="modal-1" tabindex="-1" role="dialog" aria-labelledby="TutorialModal" aria-hidden="true">
+		<div class="modal-dialog modal-lg" style="max-width: 350px">
+			<div class="modal-content">
+				 <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h3 class="modal-title">Download</h3>
+				 </div>
+					
+						<blockquote><h4 class='section-title'><br><font color='#009BFF'><strong>Personal and Powerful</strong></font></h4><a href='http://bit.ly/20VPR9n'><strong>Download</strong> the Poppo app now</a><br></blockquote>
+						<ul class='contact-list'>
+							<li class='nav-item'>Beta version 1.0 for iPhone</li>
+							<li class='nav-item'>Look for the poppo.ipa file name </li>
+							<li class='nav-item'><a class='external-link icon-link nav-link' href='mailto:info@poppo.com'>Contact us: </a> You will need to<br><strong>pre-register</strong> your iPhone prior to using the Poppo app during our beta period.</ul>
+					  	</ul>
+							 <div class="modal-footer">
+								<a href="" class="btn btn-primary" data-dismiss="modal">  Close  </a>
+							 </div>	
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+	<!-- ==============End Download Popup=================== -->
+
+	<!-- ==============Start Launch App Popup=================== 
+		 moved modal directly under <body> so it's not part of elements with special z-index-->
+	<div class="modal fade" id="modal-2" tabindex="-1" role="dialog" aria-labelledby="LaunchModal" aria-hidden="true">
+		<div class="modal-dialog modal-lg" style="max-width: 350px">
+			<div class="modal-content">
+				 <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h3 class="modal-title">Launch App</h3>
+				 </div>
+					
+						<blockquote><a href='poppo://<%=launchparams%>'><strong>Launch</strong> the Poppo app now</a><br></blockquote>
+							 <div class="modal-footer">
+								<a href="" class="btn btn-primary" data-dismiss="modal">  Close  </a>
+							 </div>	
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+	<!-- ==============End Launch App Popup=================== -->
+	
+	<!-- Start Rocket -->
+	<!-- ********************* -->
+	
+	<!-- Parallax Background
+	================================================== -->
+	<!-- image is set in the CSS as a background image -->
+	<div id="parallax"></div>
+	<!-- End Parallax Background
+	================================================== -->
+	
+	<!-- Start Header
+	================================================== -->
+	<header id="header" class="navbar navbar-inverse navbar-fixed-top" role="banner">
+	  <div class="container">
+	    <div class="navbar-header">
+	      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <!-- Logo -->
+	      <a href="http://www.poppo.com" class="navbar-brand"> <img style="width: 65%; height: 65%;" src="/assets/logo.png"></a>
+	      <!--<a href="../" class="navbar-brand" >Poppo</a> -->
+	     
+	    </div>
+	    <!-- Start Navigation -->
+	     <nav class="collapse navbar-collapse bs-navbar-collapse navbar-right" role="navigation">
+	      <!--
+	      <ul class="nav navbar-nav">
+	        <li>
+	          <a href="#hero">Home</a>
+	        </li>
+	        <li>
+	          <a href="#features">About</a>
+	        </li>
+	         <li>
+	          <a href="#newsletter">Press Kit</a>
+	        </li>
+	        <li>
+			-->
+
+	      <ul class="nav navbar-nav navbar-right header-button">
+	        <li>
+		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-1">Download</button>
+	
+	        </li>
+	      </ul>
+	    </nav>
+	  </div>
+	</header>
+	<!-- ==================================================
+	End Header -->
+
+
+	<!-- Start Shared Content Block
+	================================================== -->
+	<section id="shared" class="section" style="background-color:#FFF; border-top: 1px solid rgba(0, 0, 0, .1);">
+	<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="overview">
+					<br><br><br>
+						<img src="<%=userimageurl%>" class ="circle"><h3><br><strong><%=user%> has shared this <%=what%> with you!</strong></h3>
+						<img src="<%=imageurl%>" style="width:325px;height:250x;"><br>
+
+						<%=title%><br><br>
+						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-1">Download the Poppo app</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-2">Run the Poppo app</button>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- ==================================================
+	End Shared Content Block -->
+	
+
+	<!-- Start Contact Block
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+    <div class="modal fade" id="contact" role="dialog">
+    	<div class="modal-dialog">
+    		<div class="modal-content">
+    			<form class="form-horizontal" role="form">
+    				<div class="modal-header">
+    					<h4>Contact<h4>
+	    			</div>
+	    			<div class="modal-body">
+    					<div class="form-group">
+    						<label for="contact-name" class="col-sm-2 control-label">Name</label>
+    						<div class="col-sm-10">
+    							<input type="text" class="form-control" id="contact-name" placeholder="First & Last Name">
+    						</div>
+    					</div>
+    					<div class="form-group">
+    						<label for="contact-email" class="col-sm-2 control-label">Email</label>
+    						<div class="col-sm-10">
+    							<input type="email" class="form-control" id="contact-email" placeholder="example@domain.com">
+    						</div>
+    					</div>
+    					<div class="form-group">
+    						<label for="contact-message" class="col-sm-2 control-label">Message</label>
+    						<div class="col-sm-10">
+    							<textarea class="form-control" rows="4"></textarea>
+    						</div>
+    					</div>
+	    			</div>
+	    			<div class="modal-footer">
+						<a class="btn btn-default" data-dismiss="modal">Close</a>
+    					<button type="submit" class="btn btn-primary">Send</button>    				
+					</div>
+    			</form>
+    		</div>
+    	</div> 
+    </div>
+    <!-- ==================================================
+	End Newsletter Block -->
+	
+	
+	
+	<!-- ADD Social Media + Footer
+	================================================== -->
+	<!-- Join Us On -->
+	
+	<!-- Footer -->
+	<div class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
+    	<div class="container">
+    		<div class="navbar-text pull-left">
+    			<p>© 2016 poppo</p>
+    		</div>
+			<div class="navbar-text pull-right">
+    			<a href="www.facebook.com/poppoapp"><i class="fa fa-facebook-circle fa-2x"></i></a>
+    			<a href="https://twitter.com/playpoppo"><i class="fa fa-twitter circle fa-2x"></i></a>
+    			<a href="https://instagram.com/gopoppo/"><i class="fa fa-instagram circle fa-2x"></i></a>
+    		</div>
+    	</div>
+    </div>
+
+	
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="/js/jquery-1.10.2.min.js"></script>
+	<script src="/js/bootstrap.js"></script>
+	<script src="/js/waypoints.min.js"></script>
+	<script src="/js/jquery.scrollto.min.js"></script>
+	<script src="/js/jquery.localscroll.min.js"></script>
+	<script src="/js/jquery.prettyPhoto.js"></script>
+	<script src="/js/scripts.js"></script>
+	
+	
+	<!-- ********************* -->
+	<!-- Start Rocket -->
+
+	<!-- Canvas Message-->
+	
+	<canvas id="canvas">Your browser doesn't support canvas</canvas>
+
+	</body>
+</html>

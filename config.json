@@ -1,0 +1,14 @@
+{
+    "databaseURI": "mongodb://parse_poppo:ZKKexhnSstcQSM2AcgtPsk4E@iad1-c17-2.mongo.objectrocket.com:51151,iad1-c17-1.mongo.objectrocket.com:51151,iad1-c17-0.mongo.objectrocket.com:51151/parseMigration?ssl=true",
+    "cloud": "./cloud/main.js",
+    "appId": "r0KegEx2R4IO1Bk8ajoS",
+    "masterKey": "yQpIBp1jYc0yRVpUZYYU",
+    "fileKey": "ce4346de-4ca8-48ea-9c83-c3fe92d13ae2",
+    "push": {
+      "ios": {
+        "pfx": "../Apple Push Service development certificate com.poppo.Poppo.p12",
+        "bundleId": "com.poppo.Poppo",
+        "production": "false"
+      }
+    }
+  }
