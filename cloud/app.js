@@ -289,6 +289,6 @@ function getObject(className, userID, completionBlock) {
 	});
 }
 
-console.log("********************Listening on port 80");
+console.log("********************Listening on port " + process.env.PORT);
 
-app.listen(80);
+app.listen(process.env.PORT);
