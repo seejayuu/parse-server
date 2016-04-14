@@ -8,7 +8,7 @@ Parse.Cloud.define("iosPush", function(request, response) {
   pushQuery.equalTo('user', params.toUser)
   params.delete('toUser');
   
-  console.log("**************** Push: " + JSON.stringify(params);
+  console.log("**************** Push: " + JSON.stringify(params));
   
   Parse.Push.send({
     where: pushQuery, // Set our Installation query                                                                                                                                                              
