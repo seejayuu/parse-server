@@ -16,10 +16,3 @@ Parse.Cloud.define("sendEmailToUser", function(request, response) {
     }
   });
 });
-
-  .then(function(httpResponse) {
-    response.success("Email sent");
-  }, function(httpResponse) {
-    console.error(httpResponse);
-    response.error("Email send failed");
-  });
