@@ -7,6 +7,7 @@ Parse.Cloud.define("sendSMSToUser", function(request, response) {
     body: request.params.text
     }, function(err, responseData) {
 		if (!err) {
+			console.log("SMS Sent: from=" + request.params.from + " to=" + request.params.to + " body=" + request.params.text);
 			response.success("SMS Sent");
 		}
 		else {
