@@ -8,7 +8,7 @@ Parse.Cloud.define("sendEmailToUser", function(request, response) {
     subject: request.params.subject,
     text: request.params.text
   }).then(function(httpResponse) {
-  	console.log("Email sent: to=" request.params.to);
+  	console.log("Email sent: to=" + request.params.to);
     response.success("Email sent");
   }, function(httpResponse) {
     console.error(httpResponse);
