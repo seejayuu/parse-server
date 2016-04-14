@@ -1,5 +1,6 @@
 Parse.Cloud.define("iosPush", function(request, response) {
 
+  var params = request.params;
   var pushQuery = new Parse.Query(Parse.Installation);
 
   console.log("**************** Push: " + JSON.stringify(params));
