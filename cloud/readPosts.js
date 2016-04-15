@@ -43,7 +43,7 @@ Parse.Cloud.define("readPosts", function(request, response) {
 		return userQuery.find().then(function(results) {
 			try {
 				console.log("******************** queryPost2a results=" + results.length);
-				var postingUsers = _.filter(results, function(a) { console.log(typeof(a.get("to"))); typeof(a.get("to")) != "undefined"} ).map(function(b) { return b.get("to")});
+				var postingUsers = _.filter(results, function(a) { return typeof(a.get("to")) != "undefined"} ).map(function(b) { return b.get("to")});
 				console.log("******************** queryPost2a users=" + postingUsers.length);
 				var followQuery = getQuery("Follow");
 				followQuery.notEqualTo("type", "user").containedIn("from", postingUsers)
