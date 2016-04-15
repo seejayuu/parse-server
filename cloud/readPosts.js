@@ -76,17 +76,17 @@ Parse.Cloud.define("readPosts", function(request, response) {
 	console.log("*************");
 	
 	
-	promise.push(queryPost1());
+	promises.push(queryPost1());
 	console.log("*************");
 	
 	
 	if (!inProfile) {
 		// get posts for users the current user is following
-		promise.push(queryPost2());
+		promises.push(queryPost2());
 		//get the albums and groups posted by users the current user is following
-		promise.push(queryPost2a());
+		promises.push(queryPost2a());
 		// get the albums/groups that the current user has posted
-		promise.push(queryPost3());
+		promises.push(queryPost3());
 	}
 	console.log("*************");
 	
