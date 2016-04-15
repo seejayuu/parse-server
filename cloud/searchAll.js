@@ -63,6 +63,7 @@ Parse.Cloud.define("searchAll", function(request, response) {
 		var finalResults = [];
 		try {
 			_.each(results, function accum(r) { finalResults = finalResults.concat(r) });
+			console.log(JSON.stringify(finalResults[0]));
 			finalResults = _.sortBy(_.uniq(finalResults, false, "objectId"), function(a) { return Date.parse(a.get("createdAt")) }).reverse();
 		}
 		catch (e) {
