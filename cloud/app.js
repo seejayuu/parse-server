@@ -16,7 +16,7 @@ mail.initialize('sandbox4ba3cd71927a419db74f6a84e97973f6.mailgun.org', 'key-f7f1
 
 app.set('views', 'cloud/views');
 app.set('view engine', 'ejs');
-app.use(bodyParser.urlencoded({ extended: false }));
+//app.use(bodyParser.urlencoded({ extended: false }));
 
 //////////////////////////////////////
 // web home page
