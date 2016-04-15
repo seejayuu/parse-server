@@ -13,9 +13,6 @@ Parse.Cloud.define("searchAll", function(request, response) {
 	var user = request.user;
 	var searchResults = [];
 	var promises = [];
-	
-	console.log("Search for user: " + JSON.stringify(user));
-	
 	function getQuery(className) {
 		return new Parse.Query(Parse.Object.extend(className));
 	}
@@ -68,7 +65,7 @@ Parse.Cloud.define("searchAll", function(request, response) {
 		console.log("********");
 		_.each(results, function accum(r) { finalResults = finalResults.concat(r) });
 		console.log("finalResults count=" + finalResults.length);
-		finalResults = _.uniqBy(finalResults, function(a) { console.log("id=" + a.id); return a.id });
+		finalResults = _.uniqBy(finalResults, function(a) { console.log("id=" + JSON.stringify(a)); return "1" });
 		console.log("********");
 		_.sort(finalResults, function(a, b) { return a.get("createdAt") > b.get("createdAt") });
 		console.log("********");
