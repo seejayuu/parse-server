@@ -24,12 +24,17 @@ Parse.Cloud.define("readPosts", function(request, response) {
 		var query = getQuery("Follow");
 		query.include("to").equalTo("from", user).exists("to").notEqualTo("to", user);
 		return query.find().then(function(results) {
-			console.log("********* querypost2");
-			var users = _.filter(results, function(a) { return typeof(a) != "undefined" }).map(function(a) { return a.get("to")})
-			var query = getQuery("Post");
-			query.equalTo("createdBy", user).equalTo("type", "post").containedIn("createdBy", users).include("createdBy");
-			console.log("********* querypost2");
-			return query.find();
+			try {
+				console.log("********* querypost2");
+				var users = _.filter(results, function(a) { return typeof(a) != "undefined" }).map(function(a) { return a.get("to")})
+				var query = getQuery("Post");
+				query.equalTo("createdBy", user).equalTo("type", "post").containedIn("createdBy", users).include("createdBy");
+				console.log("********* querypost22");
+				return query.find();
+			}
+			catch (e) {
+				console.log(e);
+			}
 		});
 	}
 	//get the albums and groups posted by users the current user is following
@@ -37,13 +42,18 @@ Parse.Cloud.define("readPosts", function(request, response) {
 		var userQuery = getQuery("Follow");
 		userQuery.equalTo("type", "user").equalTo("from", user).include("to");
 		return userQuery.find().then(function(results) {
-			console.log("********* querypost2a");
-			var postingUsers = _.filter(postingUsers, function(a) { typeof(a.get("to")) != "undefined"} ).map(function(b) { return b.get("to")});
-			var followQuery = getQuery("Follow");
-			followQuery.notEqualTo("type", "user").containedIn("from", postingUsers)
-			followQuery.include("toAlbumGroup").include("toPost").include("toPost.createdBy").include("toAlbumGroup.createdBy");
-			console.log("********* querypost2a");
-			return query.find(); 
+			try {
+				console.log("********* querypost2a");
+				var postingUsers = _.filter(postingUsers, function(a) { typeof(a.get("to")) != "undefined"} ).map(function(b) { return b.get("to")});
+				var followQuery = getQuery("Follow");
+				followQuery.notEqualTo("type", "user").containedIn("from", postingUsers)
+				followQuery.include("toAlbumGroup").include("toPost").include("toPost.createdBy").include("toAlbumGroup.createdBy");
+				console.log("********* querypost2aa");
+				return query.find();
+			}
+			catch (e) {
+				console.log(e);
+			}
 		});
 	}
 	
