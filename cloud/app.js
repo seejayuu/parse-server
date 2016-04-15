@@ -26,7 +26,7 @@ app.get('/', function(request, response) {
 	response.render('home', { id: "" });
 });
 
-app.use(express.static('public'));
+//app.use(express.static('public'));
 
 //////////////////////////////////////
 // password reset
