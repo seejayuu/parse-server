@@ -2,7 +2,6 @@
 var MAX_RESULTS = 100;
 
 Parse.Cloud.define("readPosts", function(request, response) {
-		console.log("**************** queryPost1");
 	var inProfile = request.params.inProfile;
 	var user = new Parse.User();
   	user.id = request.params.user;  
@@ -16,9 +15,6 @@ Parse.Cloud.define("readPosts", function(request, response) {
 	function queryPost1() {
 		var query = getQuery("Post");
 		query.equalTo("createdBy", user).equalTo("type", "post").equalTo("createdBy", user).include("createdBy");
-		
-		console.log("**************** queryPost1");
-		
 		return query.find();
 	}
 
@@ -26,39 +22,22 @@ Parse.Cloud.define("readPosts", function(request, response) {
 	function queryPost2() {
 		var query = getQuery("Follow");
 		query.include("to").equalTo("from", user).exists("to").notEqualTo("to", user);
-		
-		console.log("**************** queryPost2");
-		
 		return query.find().then(function(results) {
-			console.log("**************** queryPost2 then");
 			return _.filter(results, function(a) { return typeof(a) != "undefined" }).map(function(a) { return a.get("to")})
 		}).then(function(results) { var query = getQuery("Post");
 			query.equalTo("createdBy", user).equalTo("type", "post").containedIn("createdBy", results).include("createdBy");
-
-			console.log("**************** queryPost2 then then");
-
 			return query.find();
 		});
 	}
-	
-	console.log("*************");
-	
 	//get the albums and groups posted by users the current user is following
 	function queryPost2a() {
 		var userQuery = getQuery("Follow");
 		userQuery.equalTo("type", "user").equalTo("from", user).include("to");
-				
-		console.log("**************** queryPost2a");
-		
-
-		return query.find().then(function(results) {
+		return userQuery.find().then(function(results) {
 			var postingUsers = _.filter(postingUsers, function(a) { typeof(a.get("to")) != "undefined"} ).map(function(b) { return b.get("to")});
 			var followQuery = getQuery("Follow");
 			followQuery.notEqualTo("type", "user").containedIn("from", postingUsers)
 			followQuery.include("toAlbumGroup").include("toPost").include("toPost.createdBy").include("toAlbumGroup.createdBy");
-				
-		console.log("**************** queryPost2a then");
-		
 			return query.find(); 
 		});
 	}
@@ -68,19 +47,9 @@ Parse.Cloud.define("readPosts", function(request, response) {
 		var query = getQuery("Follow");
 		query.include("toAlbumGroup").include("toPost").include("toPost.createdBy").include("toAlbumGroup.createdBy");
 		query.notEqualTo("type", "user").equalTo("from", user).equalTo("to", user);
-				
-		console.log("**************** queryPost3");
-		
-
 		return query.find();
 	}
-	console.log("*************");
-	
-	
 	promises.push(queryPost1());
-	console.log("*************");
-	
-	
 	if (!inProfile) {
 		// get posts for users the current user is following
 		promises.push(queryPost2());
@@ -89,9 +58,6 @@ Parse.Cloud.define("readPosts", function(request, response) {
 		// get the albums/groups that the current user has posted
 		promises.push(queryPost3());
 	}
-	console.log("*************");
-	
-	
 	Parse.Promise.when(promises).then(function(results) {
 		var finalResults = [];
 		try {
