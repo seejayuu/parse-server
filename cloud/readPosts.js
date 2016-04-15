@@ -50,7 +50,7 @@ Parse.Cloud.define("readPosts", function(request, response) {
 				followQuery.notEqualTo("type", "user").containedIn("from", postingUsers)
 				followQuery.include("toAlbumGroup").include("toPost").include("toPost.createdBy").include("toAlbumGroup.createdBy");
 				console.log("********* querypost2aa");
-				return query.find();
+				return followQuery.find();
 			}
 			catch (e) {
 				console.log(e);
@@ -77,6 +77,9 @@ Parse.Cloud.define("readPosts", function(request, response) {
 	Parse.Promise.when(promises).then(function(results) {
 		var finalResults = [];
 		try {
+		
+			_.each(results, function(a) {console.log(a);});
+		
 			_.each(results, function accum(r) { finalResults = finalResults.concat(r) });
 			finalResults = _.sortBy(_.uniq(finalResults, function (a) { return a.id }), function(a) { return a.get("createdAt") }).reverse();
 		}
