@@ -26,11 +26,10 @@ Parse.Cloud.define("readPosts", function(request, response) {
 		query.include("to").equalTo("from", user).exists("to").notEqualTo("to", user);
 		return query.find().then(function(results) {
 			try {
-				console.log("********* querypost2");
+				console.log("******************** queryPost2 follows=" + results.length);
 				var users = _.filter(results, function(a) { return typeof(a) != "undefined" }).map(function(a) { return a.get("to")})
 				var query = getQuery("Post");
 				query.equalTo("createdBy", user).equalTo("type", "post").containedIn("createdBy", users).include("createdBy");
-				console.log("********* querypost22");
 				return query.find();
 			}
 			catch (e) {
@@ -44,12 +43,11 @@ Parse.Cloud.define("readPosts", function(request, response) {
 		userQuery.equalTo("type", "user").equalTo("from", user).include("to");
 		return userQuery.find().then(function(results) {
 			try {
-				console.log("********* querypost2a");
+				console.log("******************** queryPost2a users=" + results.length);
 				var postingUsers = _.filter(postingUsers, function(a) { typeof(a.get("to")) != "undefined"} ).map(function(b) { return b.get("to")});
 				var followQuery = getQuery("Follow");
 				followQuery.notEqualTo("type", "user").containedIn("from", postingUsers)
 				followQuery.include("toAlbumGroup").include("toPost").include("toPost.createdBy").include("toAlbumGroup.createdBy");
-				console.log("********* querypost2aa");
 				return followQuery.find();
 			}
 			catch (e) {
@@ -77,9 +75,6 @@ Parse.Cloud.define("readPosts", function(request, response) {
 	Parse.Promise.when(promises).then(function(results) {
 		var finalResults = [];
 		try {
-		
-			_.each(results, function(a) {console.log(a);});
-		
 			_.each(results, function accum(r) { finalResults = finalResults.concat(r) });
 			finalResults = _.sortBy(_.uniq(finalResults, function (a) { return a.id }), function(a) { return a.get("createdAt") }).reverse();
 		}
