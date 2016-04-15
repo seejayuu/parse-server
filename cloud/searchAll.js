@@ -63,8 +63,7 @@ Parse.Cloud.define("searchAll", function(request, response) {
 		var finalResults = [];
 		try {
 			_.each(results, function accum(r) { finalResults = finalResults.concat(r) });
-			finalResults = _.uniq(finalResults);
-			_.sortBy(finalResults, function(a) { return Date.parse(a.get("createdAt")) });
+			finalResults = _.sortBy(_.uniq(finalResults), function(a) { return Date.parse(a.get("createdAt")) });
 		}
 		catch (e) {
 			console.log(e);
