@@ -1,6 +1,7 @@
 var _ = require("underscore");
 
 Parse.Cloud.define("searchAll", function(request, response) {
+	console.log("searchAll: params=" + JSON.stringify(request.params));
 	var Scope = {
 		All: 0,
 		Users: 1,
