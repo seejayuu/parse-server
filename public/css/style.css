@@ -393,7 +393,7 @@ label {
 
 /* help make background image more responsive */ 
 h4.reserve {
-background: url(../assets/background.png) no-repeat;
+background: url(assets/background.png) no-repeat;
 background-size: cover;
 width: 60%;
 min-width: 100px;
