@@ -1,8 +1,6 @@
 
 var MAX_RESULTS = 100;
 
-xxxxxx
-
 Parse.Cloud.define("readPosts", function(request, response) {
 	var inProfile = request.params.inProfile;
 	var user = request.params.user;
@@ -41,6 +39,8 @@ Parse.Cloud.define("readPosts", function(request, response) {
 		});
 	}
 	
+	console.log("*************");
+	
 	//get the albums and groups posted by users the current user is following
 	function queryPost2a() {
 		var userQuery = getQuery("Follow");
@@ -72,8 +72,12 @@ Parse.Cloud.define("readPosts", function(request, response) {
 
 		return query.find();
 	}
+	console.log("*************");
+	
 	
 	promise.push(queryPost1());
+	console.log("*************");
+	
 	
 	if (!inProfile) {
 		// get posts for users the current user is following
@@ -83,6 +87,8 @@ Parse.Cloud.define("readPosts", function(request, response) {
 		// get the albums/groups that the current user has posted
 		promise.push(queryPost3());
 	}
+	console.log("*************");
+	
 	
 	Parse.Promise.when(promises).then(function(results) {
 		var finalResults = [];
