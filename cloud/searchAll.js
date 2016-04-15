@@ -62,14 +62,16 @@ Parse.Cloud.define("searchAll", function(request, response) {
 	Parse.Promise.when(promises).then(function(results) {
 		// TODO: sort the results
 		var finalResults = [];
-		console.log("********");
 		_.each(results, function accum(r) { finalResults = finalResults.concat(r) });
-		console.log("finalResults[0]=" + JSON.stringify(finalResults[0]));
-		
-		//finalResults = _.uniq(finalResults);
+		try {
+		finalResults = _.uniq(finalResults);
 		console.log("********");
-		//_.sort(finalResults, function(a, b) { return a.get("createdAt") > b.get("createdAt") });
+		_.sort(finalResults, function(a, b) { return a.get("createdAt") > b.get("createdAt") });
 		console.log("********");
+		}
+		catch (e) {
+			console.log(e);
+		}
 		response.success(finalResults);
 		console.log("********");
 	});
