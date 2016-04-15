@@ -60,18 +60,15 @@ Parse.Cloud.define("searchAll", function(request, response) {
 		promises.push(queryUserField("name"));
 	}
 	Parse.Promise.when(promises).then(function(results) {
-		// TODO: sort the results
 		var finalResults = [];
-		_.each(results, function accum(r) { finalResults = finalResults.concat(r) });
-		console.log("[0]="+ Date.parse(finalResults[0].get("createdAt")));
 		try {
-		finalResults = _.uniq(finalResults);
-		_.sortBy(finalResults, function(a) { return a.get("createdAt") });
+			_.each(results, function accum(r) { finalResults = finalResults.concat(r) });
+			finalResults = _.uniq(finalResults);
+			_.sortBy(finalResults, function(a) { return Date.parse(a.get("createdAt")) });
 		}
 		catch (e) {
 			console.log(e);
 		}
 		response.success(finalResults);
-		console.log("********");
 	});
 });
