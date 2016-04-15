@@ -26,8 +26,8 @@ Parse.Cloud.define("readPosts", function(request, response) {
 		query.include("to").equalTo("from", user).exists("to").notEqualTo("to", user);
 		return query.find().then(function(results) {
 			try {
-				console.log("******************** queryPost2 follows=" + results.length);
 				var users = _.filter(results, function(a) { return typeof(a) != "undefined" }).map(function(a) { return a.get("to")})
+				console.log("******************** queryPost2 users=" + users.length);
 				var query = getQuery("Post");
 				query.equalTo("createdBy", user).equalTo("type", "post").containedIn("createdBy", users).include("createdBy");
 				return query.find();
@@ -43,8 +43,8 @@ Parse.Cloud.define("readPosts", function(request, response) {
 		userQuery.equalTo("type", "user").equalTo("from", user).include("to");
 		return userQuery.find().then(function(results) {
 			try {
-				console.log("******************** queryPost2a users=" + results.length);
 				var postingUsers = _.filter(postingUsers, function(a) { typeof(a.get("to")) != "undefined"} ).map(function(b) { return b.get("to")});
+				console.log("******************** queryPost2a users=" + postingUsers.length);
 				var followQuery = getQuery("Follow");
 				followQuery.notEqualTo("type", "user").containedIn("from", postingUsers)
 				followQuery.include("toAlbumGroup").include("toPost").include("toPost.createdBy").include("toAlbumGroup.createdBy");
