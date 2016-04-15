@@ -393,7 +393,7 @@ label {
 
 /* help make background image more responsive */ 
 h4.reserve {
-background: url(assets/background.png) no-repeat;
+background: url(../assets/background.png) no-repeat;
 background-size: cover;
 width: 60%;
 min-width: 100px;
@@ -404,7 +404,7 @@ min-width: 100px;
   width: 100%;
   top: 0;
   position: fixed;
-  background: url('http://poppo.com/assets/background.png') center center no-repeat; 
+  background: url('../assets/background.png') center center no-repeat; 
   background-size: cover;
   z-index: -100;
 }
