@@ -26,6 +26,8 @@ app.get('/', function(request, response) {
 	response.render('home', { id: "" });
 });
 
+app.use(express.static('public'));
+
 //////////////////////////////////////
 // password reset
 //////////////////////////////////////
@@ -288,7 +290,5 @@ function getObject(className, userID, completionBlock) {
 		}
 	});
 }
-
-console.log("********************Listening on port " + process.env.PORT);
 
 //app.listen(process.env.PORT || 8080);
