@@ -1,4 +1,3 @@
-var _ = require("underscore");
 
 var MAX_RESULTS = 100;
 
