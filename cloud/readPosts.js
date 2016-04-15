@@ -2,6 +2,7 @@
 var MAX_RESULTS = 100;
 
 Parse.Cloud.define("readPosts", function(request, response) {
+	console.log("readPosts: params=" + JSON.stringify(request.params));
 	var inProfile = request.params.inProfile;
 	var user = new Parse.User();
   	user.id = request.params.user;  
