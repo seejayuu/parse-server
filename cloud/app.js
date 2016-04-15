@@ -7,7 +7,7 @@
 var debug = true
 
 var express = require('express');
-var app = express();
+//var app = express();
 var http = require('http');
 var mail = require('./Mailgun.js');
 var bodyParser = require('body-parser')
