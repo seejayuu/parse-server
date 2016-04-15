@@ -67,8 +67,8 @@ Parse.Cloud.define("searchAll", function(request, response) {
 		var finalResults = [];
 		console.log("********");
 		_.each(results, function accum(r) { finalResults = finalResults.concat(r) });
-		console.log("********");
-		finalResults = _.uniqBy(finalResults, function(a) { return a.id });
+		console.log("finalResults count=" + finalResults.length);
+		finalResults = _.uniqBy(finalResults, function(a) { console.log("id=" + a.id); return a.id });
 		console.log("********");
 		_.sort(finalResults, function(a, b) { return a.get("createdAt") > b.get("createdAt") });
 		console.log("********");
