@@ -74,4 +74,4 @@ Parse.Cloud.define("generateTags", function(request, response) {
 		else
 			response.error("Photo not found");
 	});
-}
+});
