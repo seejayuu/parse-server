@@ -29,7 +29,6 @@ Parse.Cloud.define("searchAll", function(request, response) {
 		promises.push(queryPostField("title"));
 		promises.push(queryPostField("notes"));
 	}
-	}
 	if (filter == Scope.All || filter == Scope.Albums || filter == Scope.Groups) {
 		// search groups and albums
 		function queryAlbumGroupField(type, field) {
