@@ -7,7 +7,7 @@
 var debug = true
 
 var express = require('express');
-//var app = express();
+var app = express();
 var http = require('http');
 var mail = require('./Mailgun.js');
 var bodyParser = require('body-parser')
@@ -16,7 +16,7 @@ mail.initialize('sandbox4ba3cd71927a419db74f6a84e97973f6.mailgun.org', 'key-f7f1
 
 app.set('views', 'cloud/views');
 app.set('view engine', 'ejs');
-//app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 //////////////////////////////////////
 // web home page
@@ -26,7 +26,7 @@ app.get('/', function(request, response) {
 	response.render('home', { id: "" });
 });
 
-//app.use(express.static('public'));
+app.use(express.static('public'));
 
 //////////////////////////////////////
 // password reset
