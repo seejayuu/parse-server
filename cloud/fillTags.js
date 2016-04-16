@@ -65,7 +65,7 @@ Parse.Cloud.define("generateTags", function(request, response) {
 						console.log("Tags from " + recognizers[index].name + ": " + JSON.stringify(tags[0]));
 						var maxtags = Math.min(MAX_FROM_ONE_RECOGNIZER, tags[0].classes.length);
 						for (j = 0; j < maxtags; j++) {
-							tagResults.append(tags[0].classes[j]);
+							tagResults.push(tags[0].classes[j]);
 						}
 						if (++resultCount >= recognizers.length) {
 							response.success(tagResults);
