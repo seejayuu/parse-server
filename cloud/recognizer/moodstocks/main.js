@@ -36,9 +36,9 @@ function tagURL(imageURL, completion) {
   	},
     url: "http://" + apiURL + searchPath,
     method: 'POST',
-    json: true,
-    body: obj
-    //body: Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&'),
+//    json: true,
+//    body: obj
+    body: Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&'),
     },
 	function(error, response, body) {
 		if (!error) {
