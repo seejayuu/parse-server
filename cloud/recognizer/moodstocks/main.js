@@ -44,7 +44,7 @@ function tagURL(imageURL, completion) {
 			completion(err);
 		});
 	}
-  });
+  );
 }
 
 exports.getTags = getTags
