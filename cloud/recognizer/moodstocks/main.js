@@ -43,7 +43,7 @@ function tagURL(imageURL, completion) {
 	function(error, response, body) {
 		if (!error) {
 		  console.log("Moodstocks API success: " + JSON.stringify(body));
-		  completion(null, JSON.stringify(body));
+		  completion(null, body);
 		}
 		else
 			completion(err);
