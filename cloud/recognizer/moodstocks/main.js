@@ -34,14 +34,16 @@ function tagURL(imageURL, completion) {
     port: 80,
     method: 'POST',
     body: Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&'),
-    success: function(response) {
-      console.log("Moodstocks API success: " + JSON.stringify(response.data));
-      completion(null, response.data);
     },
-    error: function(error) {
-      console.error("Moodstocks error: " + JSON.stringify(error));
-      completion(error);
-    }
+	function(result) {
+		result.on('data', function(data) {
+		  console.log("Moodstocks API success: " + JSON.stringify(data));
+		  completion(null, data);
+		});
+		result.on('error', function(err) {
+			completion(err);
+		});
+	}
   });
 }
 
