@@ -29,6 +29,11 @@ var request = require('request');
 function tagURL(imageURL, completion) {
 	var obj = { image_url: imageURL };
   	request.post({
+  	auth: {
+  		user: api_key,
+  		pass: api_secret,
+  		sendImmediately: false
+  	},
     url: "http://" + apiURL + searchPath,
     method: 'POST',
     json: true,
