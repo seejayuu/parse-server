@@ -24,9 +24,7 @@ function getTags(imageURL, imageID, completion) {
 	});
 }
 
-var digest = require('http-digest-client')
-
-digest.createDigestClient(api_key, api_secret);
+var digest = require('http-digest-client')(api_key, api_secret);
 
 function tagURL(imageURL, completion) {
 	var obj = { image_url: imageURL };
