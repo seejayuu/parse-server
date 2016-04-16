@@ -9,6 +9,7 @@ var requestTokenPath = "/v1/token";
 
 function getTags(imageURL, imageID, completion) {
 	var results = []
+	console.log("******************0");
 	tagURL(imageURL , imageID, function(error, res) {
 		console.log("*********************1");
 		if (error == null) {
@@ -44,6 +45,7 @@ function getTags(imageURL, imageID, completion) {
 function tagURL(imageURL, imageID, completion) {
 	// get the session token
 	var obj = { client_id: clientID, client_secret: clientSecret, grant_type: "client_credentials"}
+	console.log("*******************4");
 	Parse.Cloud.httpRequest({
 		url: "https://" + apiURL + requestTokenPath,
 		method: 'POST',
