@@ -24,27 +24,24 @@ function getTags(imageURL, imageID, completion) {
 	});
 }
 
-var digest = require('http-digest-client')(api_key, api_secret);
+var request = require('request');
 
 function tagURL(imageURL, completion) {
 	var obj = { image_url: imageURL };
-  digest.request({
-    host: apiURL,
-    path: searchPath,
-    port: 80,
+  	request.post({
+    url: "http://" + apiURL + searchPath,
     method: 'POST',
-    json: obj
+    json: true,
+    body: obj
     //body: Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&'),
     },
-	function(result) {
-		result.on('data', function(data) {
-			console.log("******** image_url=" + imageURL);
-		  console.log("Moodstocks API success: " + data.toString());
-		  completion(null, data.toString());
-		});
-		result.on('error', function(err) {
+	function(error, response, body) {
+		if (!error) {
+		  console.log("Moodstocks API success: " + body);
+		  completion(null, body);
+		}
+		else
 			completion(err);
-		});
 	}
   );
 }
