@@ -10,6 +10,7 @@ var requestTokenPath = "/v1/token";
 function getTags(imageURL, imageID, completion) {
 	var results = []
 	tagURL(imageURL , imageID, function(error, res) {
+		console.log("*********************1");
 		if (error == null) {
 			// if some images were successfully tagged and some encountered errors,
 			// the status_code PARTIAL_ERROR is returned. In this case, we inspect the
@@ -48,6 +49,7 @@ function tagURL(imageURL, imageID, completion) {
 		method: 'POST',
 		body: Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&'),
 		success: function(response) {
+			console.log("*****************2");
 			// upload the image and read back the tags
 			Parse.Cloud.httpRequest({
 				url: "https://" + apiURL + tagPath + '?access_token=' + response.data.access_token + '&url=' + imageURL,
