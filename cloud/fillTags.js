@@ -60,7 +60,7 @@ Parse.Cloud.define("generateTags", function(request, response) {
 				for (i = 0; i < recognizers.length; i++) {
 					(function(index) {
 					  console.log("Requesting from: " + recognizers[index].name);
-					  recognizers[index].module.getTags(request.object.get("itemImage").url(), request.object.id, function(tags) {
+					  recognizers[index].module.getTags(result.get("itemImage").url(), request.params.photoId, function(tags) {
 						// only use the top tags
 						console.log("Tags from " + recognizers[index].name + ": " + JSON.stringify(tags[0]));
 						var maxtags = Math.min(MAX_FROM_ONE_RECOGNIZER, tags[0].classes.length);
