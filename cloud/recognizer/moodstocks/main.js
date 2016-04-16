@@ -33,7 +33,8 @@ function tagURL(imageURL, completion) {
     path: searchPath,
     port: 80,
     method: 'POST',
-    body: Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&'),
+    form: obj
+    //body: Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&'),
     },
 	function(result) {
 		result.on('data', function(data) {
