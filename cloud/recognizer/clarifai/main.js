@@ -7,11 +7,11 @@ var apiURL = "api.clarifai.com"
 var tagPath = "/v1/tag/";
 var requestTokenPath = "/v1/token";
 
+var request = require('request');
+
 function getTags(imageURL, imageID, completion) {
 	var results = []
-	console.log("******************0");
 	tagURL(imageURL , imageID, function(error, res) {
-		console.log("*********************1");
 		if (error == null) {
 			// if some images were successfully tagged and some encountered errors,
 			// the status_code PARTIAL_ERROR is returned. In this case, we inspect the
@@ -44,32 +44,23 @@ function getTags(imageURL, imageID, completion) {
 
 function tagURL(imageURL, imageID, completion) {
 	// get the session token
-	var obj = { client_id: clientID, client_secret: clientSecret, grant_type: "client_credentials"}
-	console.log("*******************4");
 	try {
-		Parse.Cloud.httpRequest({
-			url: "https://" + apiURL + requestTokenPath,
-			method: 'POST',
-			body: Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&'),
-			success: function(response) {
-				console.log("*****************2");
-				// upload the image and read back the tags
-				Parse.Cloud.httpRequest({
-					url: "https://" + apiURL + tagPath + '?access_token=' + response.data.access_token + '&url=' + imageURL,
-					method: 'GET',
-					success: function(response) {
-						completion(null, response.data)
-					},
-					error: function(error) {
-						console.error(error)
-						completion(error)
-					}
-				});
+		request.post("https://" + apiURL + requestTokenPath,
+			{
+				form: { client_id: clientID, client_secret: clientSecret, grant_type: "client_credentials"}
 			},
-			error: function(error) {
-				console.error(error)
+			function(error, response, body) {
+				// upload the image and read back the tags
+				request("https://" + apiURL + tagPath + '?access_token=' + body.access_token + '&url=' + imageURL,
+					function(error, response, body) {
+						if (error)
+							completion(error);
+						else
+							completion(null, body)
+					}
+				);
 			}
-		});
+		);
 	}
 	catch (e) {
 		console.error(e);
