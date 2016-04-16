@@ -51,6 +51,7 @@ function tagURL(imageURL, imageID, completion) {
 			},
 			function(error, response, body) {
 				// upload the image and read back the tags
+				console.log(body);
 				request("https://" + apiURL + tagPath + '?access_token=' + body.access_token + '&url=' + imageURL,
 					function(error, response, body) {
 						if (error)
