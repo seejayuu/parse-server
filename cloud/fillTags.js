@@ -2,6 +2,8 @@
  * uses various 3rd party services to generate tags for images
  */
  
+var user = require('./util/user.js');
+ 
 var MAX_FROM_ONE_RECOGNIZER = 6
  
 var user = require('./util/user.js');
@@ -50,28 +52,33 @@ Parse.Cloud.afterSave("Post", function(request) {
 });
 
 Parse.Cloud.define("generateTags", function(request, response) {
-	user.getObject("Post", request.params.photoId, function(result) {
-		if (result) {
-			var tagResults = [];
-			var resultCount = 0;
-			for (i = 0; i < recognizers.length; i++) {
-				(function(index) {
-				  console.log("Requesting from: " + recognizers[index].name);
-				  recognizers[index].module.getTags(request.object.get("itemImage").url(), request.object.id, function(tags) {
-					// only use the top tags
-					console.log("Tags from " + recognizers[index].name + ": " + JSON.stringify(tags[0]));
-					var maxtags = Math.min(MAX_FROM_ONE_RECOGNIZER, tags[0].classes.length);
-					for (j = 0; j < maxtags; j++) {
-						tagResults.append(tags[0].classes[j]);
-					}
-					if (++resultCount >= recognizers.length) {
-						response.success(tagResults);
-					}
-				  });
-				})(i);
+	try {
+		user.getObject("Post", request.params.photoId, function(result) {
+			if (result) {
+				var tagResults = [];
+				var resultCount = 0;
+				for (i = 0; i < recognizers.length; i++) {
+					(function(index) {
+					  console.log("Requesting from: " + recognizers[index].name);
+					  recognizers[index].module.getTags(request.object.get("itemImage").url(), request.object.id, function(tags) {
+						// only use the top tags
+						console.log("Tags from " + recognizers[index].name + ": " + JSON.stringify(tags[0]));
+						var maxtags = Math.min(MAX_FROM_ONE_RECOGNIZER, tags[0].classes.length);
+						for (j = 0; j < maxtags; j++) {
+							tagResults.append(tags[0].classes[j]);
+						}
+						if (++resultCount >= recognizers.length) {
+							response.success(tagResults);
+						}
+					  });
+					})(i);
+				}
 			}
-		}
-		else
-			response.error("Photo not found");
-	});
+			else
+				response.error("Photo not found");
+		});
+	}
+	catch (e) {
+		console.error(e);
+	}
 });
