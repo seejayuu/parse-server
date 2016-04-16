@@ -44,29 +44,23 @@ function getTags(imageURL, imageID, completion) {
 
 function tagURL(imageURL, imageID, completion) {
 	// get the session token
-	try {
-		request.post("https://" + apiURL + requestTokenPath,
-			{
-				form: { client_id: clientID, client_secret: clientSecret, grant_type: "client_credentials"}
-			},
-			function(error, response, body) {
-				// upload the image and read back the tags
-				console.log("*************** " + JSON.parse(body).access_token);
-				request("https://" + apiURL + tagPath + '?access_token=' + JSON.parse(body).access_token + '&url=' + imageURL,
-					function(error, response, body) {
-						console.log(body);
-						if (error)
-							completion(error);
-						else
-							completion(null, body)
-					}
-				);
-			}
-		);
-	}
-	catch (e) {
-		console.error(e);
-	}
+	request.post("https://" + apiURL + requestTokenPath,
+		{
+			form: { client_id: clientID, client_secret: clientSecret, grant_type: "client_credentials"}
+		},
+		function(error, response, body) {
+			// upload the image and read back the tags
+			console.log("*************** " + JSON.parse(body).access_token);
+			request("https://" + apiURL + tagPath + '?access_token=' + JSON.parse(body).access_token + '&url=' + imageURL,
+				function(error, response, body) {
+					if (error)
+						completion(error);
+					else
+						completion(null, JSON.parse(body))
+				}
+			);
+		}
+	);
 }
 
 exports.getTags = getTags
