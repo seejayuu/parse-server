@@ -46,29 +46,34 @@ function tagURL(imageURL, imageID, completion) {
 	// get the session token
 	var obj = { client_id: clientID, client_secret: clientSecret, grant_type: "client_credentials"}
 	console.log("*******************4");
-	Parse.Cloud.httpRequest({
-		url: "https://" + apiURL + requestTokenPath,
-		method: 'POST',
-		body: Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&'),
-		success: function(response) {
-			console.log("*****************2");
-			// upload the image and read back the tags
-			Parse.Cloud.httpRequest({
-				url: "https://" + apiURL + tagPath + '?access_token=' + response.data.access_token + '&url=' + imageURL,
-				method: 'GET',
-				success: function(response) {
-					completion(null, response.data)
-				},
-				error: function(error) {
-					console.error(error)
-					completion(error)
-				}
-			});
-		},
-		error: function(error) {
-			console.error(error)
-		}
-	});
+	try {
+		Parse.Cloud.httpRequest({
+			url: "https://" + apiURL + requestTokenPath,
+			method: 'POST',
+			body: Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&'),
+			success: function(response) {
+				console.log("*****************2");
+				// upload the image and read back the tags
+				Parse.Cloud.httpRequest({
+					url: "https://" + apiURL + tagPath + '?access_token=' + response.data.access_token + '&url=' + imageURL,
+					method: 'GET',
+					success: function(response) {
+						completion(null, response.data)
+					},
+					error: function(error) {
+						console.error(error)
+						completion(error)
+					}
+				});
+			},
+			error: function(error) {
+				console.error(error)
+			}
+		});
+	}
+	catch (e) {
+		console.error(e);
+	}
 }
 
 exports.getTags = getTags
