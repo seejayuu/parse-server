@@ -16,7 +16,7 @@ function getTags(imageURL, imageID, completion) {
 			console.log(res.found);
 			console.log(res.id);
 		  if (res.found) {
-		    completion([ { classes: [res.id] } ])
+		    completion([ { classes: [res.id.replace("-","")] } ])
 		  }
 		  else
 		    completion([{ classes: [] }])
