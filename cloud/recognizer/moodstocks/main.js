@@ -37,6 +37,7 @@ function tagURL(imageURL, completion) {
     },
 	function(result) {
 		result.on('data', function(data) {
+			console.log("******** image_url=" + imageURL);
 		  console.log("Moodstocks API success: " + data.toString());
 		  completion(null, data.toString());
 		});
