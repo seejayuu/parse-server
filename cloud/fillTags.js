@@ -49,6 +49,7 @@ Parse.Cloud.afterSave("Post", function(request) {
 	});	
 });
 
+/*
 Parse.Cloud.define("generateTags", function(request, response) {
 	user.getObject("Post", request.params.photoId, function(result) {
 		if (result) {
@@ -75,3 +76,4 @@ Parse.Cloud.define("generateTags", function(request, response) {
 			response.error("Photo not found");
 	});
 });
+*/
