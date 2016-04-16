@@ -2,6 +2,8 @@
  * uses various 3rd party services to generate tags for images
  */
  
+var user = require('./util/user.js');
+ 
 var MAX_FROM_ONE_RECOGNIZER = 6
  
 var user = require('./util/user.js');
