@@ -51,7 +51,7 @@ app.get('/backendcheck', function(request, response) {
 			console.log("Back end check: " + JSON.stringify(data));
 		}
 		response.render('backendcheck', {status: status, responseTime: new Date() - startTime});
-	}
+	});
 });
 
 //////////////////////////////////////
