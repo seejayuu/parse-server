@@ -40,7 +40,7 @@ app.get('/backendcheck', function(req, response) {
 			"X-Parse-Application-Id": 'r0KegEx2R4IO1Bk8ajoS'
 		},
 		
-	}, function (error, response, data) {
+	}, function (error, resp, data) {
 		var status;
 		var startTime = new Date();;
 		if (error) {
