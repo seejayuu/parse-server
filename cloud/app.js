@@ -10,7 +10,8 @@ var express = require('express');
 //var app = express();		// now runs off the parse-server express instance
 var http = require('http');
 var mail = require('./Mailgun.js');
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
+var request = require('request');
 
 mail.initialize('sandbox4ba3cd71927a419db74f6a84e97973f6.mailgun.org', 'key-f7f17e392715c4328b9274a4557d08a5');
 
@@ -26,7 +27,32 @@ app.get('/', function(request, response) {
 	response.render('home', { id: "" });
 });
 
-//app.use(express.static('public'));
+app.use(express.static('public'));
+
+//////////////////////////////////////
+// Pingdom service monitoring
+//////////////////////////////////////
+
+app.get('/backendcheck', function(request, response) {
+	request({
+		url: "http://poppo.herokuapp.com/parse,
+		headers: {
+			X-Parse-Application-Id: 'r0KegEx2R4IO1Bk8ajoS',
+		},
+		
+	}, function (error, response, data) {
+		var status;
+		var startTime = new Date();;
+		if (error) {
+			status = error;
+		}
+		else {
+			status = "OK"
+			console.log("Back end check: " + JSON.stringify(data);
+		}
+		response.render('backendcheck', {status: responseTime: nwe Date() - startTime});
+	}
+});
 
 //////////////////////////////////////
 // password reset
