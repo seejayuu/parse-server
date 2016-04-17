@@ -34,7 +34,7 @@ app.use(express.static('public'));
 //////////////////////////////////////
 
 app.get('/backendcheck', function(request, response) {
-	request({
+	request.get({
 		url: "http://poppo.herokuapp.com/parse",
 		//headers: {
 		//	"X-Parse-Application-Id": 'r0KegEx2R4IO1Bk8ajoS'
