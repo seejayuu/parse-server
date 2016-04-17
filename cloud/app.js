@@ -33,12 +33,12 @@ app.use(express.static('public'));
 // Pingdom service monitoring
 //////////////////////////////////////
 
-app.get('/backendcheck', function(request, response) {
-	request.get({
+app.get('/backendcheck', function(req, response) {
+	request({
 		url: "http://poppo.herokuapp.com/parse",
-		//headers: {
-		//	"X-Parse-Application-Id": 'r0KegEx2R4IO1Bk8ajoS'
-		//},
+		headers: {
+			"X-Parse-Application-Id": 'r0KegEx2R4IO1Bk8ajoS'
+		},
 		
 	}, function (error, response, data) {
 		var status;
