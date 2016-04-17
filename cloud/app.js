@@ -48,7 +48,7 @@ app.get('/backendcheck', function(request, response) {
 		}
 		else {
 			status = "OK"
-			console.log("Back end check: " + JSON.stringify(data);
+			console.log("Back end check: " + JSON.stringify(data));
 		}
 		response.render('backendcheck', {status: responseTime: nwe Date() - startTime});
 	}
