@@ -42,3 +42,5 @@ function getTags(imageURL, imageID, completion) {
 		console.error(e);
   	}
 }
+
+exports.getTags = getTags
