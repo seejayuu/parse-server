@@ -11,8 +11,10 @@ Parse.Cloud.define("iosPush", function(request, response) {
 	  delete params.toUser;
 	  var query = new Parse.Query(Parse.Object.extend("_Installation"));
 	  query.equalTo("installationId", params.installationId);
+	  console.log("*****************************");
 	  query.find({
 		success: function(result) {
+		console.log("++++++++++++++++++++");
 		  if (params.badge == "Increment") {
 			result.increment("badge");
 			params.badge = result.get("badge");
@@ -29,6 +31,9 @@ Parse.Cloud.define("iosPush", function(request, response) {
 		  }, error: function(error) {
 			  console.log("#### PUSH ERROR" + error.message);
 		  }, useMasterKey: true});
+		},
+		error: function(error) {
+			console.log(error);
 		}
 	  });	
 	  response.success('success');
