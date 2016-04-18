@@ -14,6 +14,7 @@ Parse.Cloud.define("iosPush", function(request, response) {
 	  query.equalTo("installationId", params.installationId);
 	  query.find({
 		success: function(result) {
+			try {
 		  if (params.badge == "Increment") {
 		  console.log("*******************1");
 			//result.increment("badge");
@@ -34,6 +35,7 @@ Parse.Cloud.define("iosPush", function(request, response) {
 		  }, error: function(error) {
 			  console.log("#### PUSH ERROR" + error.message);
 		  }, useMasterKey: true});
+		  } catch(e){console.error(e);}
 		},
 		error: function(error) {
 			console.log(error);
