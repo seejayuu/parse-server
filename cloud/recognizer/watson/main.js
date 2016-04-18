@@ -5,6 +5,8 @@ var request = require('request');
 function getTags(imageURL, imageID, completion) {
 	try {
 		request.get({ url: imageURL, encoding: null }, function(err, res, body){
+			if (err)
+				console.error(err);
 			var req = request.post({
 				auth: {
 					user: '738d4720-4a4e-4df4-80e9-721602ed1a72',
@@ -18,7 +20,10 @@ function getTags(imageURL, imageID, completion) {
 					if (!error2) {
 					  console.log("Watson API success: " + JSON.stringify(body2));
 					  var response = JSON.parse(body);
-					  completion(null, [ { classes: [_.map(response.images.scores, function(a) { return a.name })] } ]);
+					  if (response.code == "200") {
+					  	completion(null, [ { classes: [_.map(response.images.scores, function(a) { return a.name })] } ]);
+					  else
+					  	completion([{ classes: [] }]);
 					}
 					else
 						completion([{ classes: [] }]);
