@@ -2,7 +2,10 @@
 
 function getTags(imageURL, imageID, completion) {
 	try {
+		console.log("********************************1");
 		request.get({ url: imageURL, encoding: null }, function(err, res, body){
+				console.log("******************************** GOT IMAGE");
+
 			var req = request.post({
 				auth: {
 					user: '738d4720-4a4e-4df4-80e9-721602ed1a72',
@@ -13,6 +16,7 @@ function getTags(imageURL, imageID, completion) {
 				method: 'POST',
 				},
 				function(error2, res2, body2) {
+						console.log("******************************** WATSONE RESPONSE");
 					if (!error2) {
 					  console.log("Watson API success: " + JSON.stringify(body));
 					  var response = JSON.parse(body);
@@ -30,6 +34,7 @@ function getTags(imageURL, imageID, completion) {
 		});
   	}
   	catch (e) {
+		console.log("******************************** ERROR");
 		console.error(e);
   	}
 }
