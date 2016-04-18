@@ -29,6 +29,7 @@ function getTags(imageURL, imageID, completion) {
 				}
 			);
 			var form = req.form();
+			console.log ("************content-type: " + res.headers['content-type']);
 			form.append('images_file', body, {
 				filename: "poppoIR",
 				contentType: res.headers['content-type']
