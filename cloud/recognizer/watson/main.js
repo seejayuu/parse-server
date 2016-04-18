@@ -20,7 +20,7 @@ function getTags(imageURL, imageID, completion) {
 					if (!error2) {
 					  console.log("Watson API success: " + JSON.stringify(body2));
 					  var response = JSON.parse(body);
-					  if (response.code == "200") {
+					  if (response.code == "200")
 					  	completion(null, [ { classes: [_.map(response.images.scores, function(a) { return a.name })] } ]);
 					  else
 					  	completion([{ classes: [] }]);
