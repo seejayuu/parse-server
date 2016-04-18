@@ -29,7 +29,7 @@ function getTags(imageURL, imageID, completion) {
 				}
 			);
 			var form = req.form();
-			form.append('images_file', body, {
+			form.append('images_file', toBuffer(body), {
 				filename: "poppoIR",
 				contentType: "image/jpeg"
 			});
