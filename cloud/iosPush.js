@@ -9,12 +9,10 @@ Parse.Cloud.define("iosPush", function(request, response) {
 	  user.id = params.toUser;                                                                                                                                         
 	  pushQuery.equalTo('user', user)
 	  delete params.toUser;
-	  var query = new Parse.Query(Parse.Object.extend("_Installation"));
+	  var query = new Parse.Query(Parse.Object.extend("_Installation"), {useMasterKey:true});
 	  query.equalTo("installationId", params.installationId);
-	  console.log("*****************************");
 	  query.find({
 		success: function(result) {
-		console.log("++++++++++++++++++++");
 		  if (params.badge == "Increment") {
 			result.increment("badge");
 			params.badge = result.get("badge");
