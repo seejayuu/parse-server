@@ -26,7 +26,7 @@ Parse.Cloud.define("iosPush", function(request, response) {
 			result.set("badge", params.badge);
 		  delete params.installationId;
 		  console.log("*******************3");
-		  result.saveEventually();
+		  result.save();
 		  console.log("*******************4");
 		  Parse.Push.send({
 			where: pushQuery, // Set our Installation query                                                                                                                                                              
