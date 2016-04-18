@@ -17,11 +17,11 @@ Parse.Cloud.define("iosPush", function(request, response) {
 		  if (params.badge == "Increment") {
 		  console.log("*******************1");
 			result.increment("badge");
+		  console.log("*******************2");
 			params.badge = result.get("badge");
 		  }
 		  else
 			result.set("badge", params.badge);
-		  console.log("*******************2");
 		  delete params.installationId;
 		  console.log("*******************3");
 		  result.saveEventually();
