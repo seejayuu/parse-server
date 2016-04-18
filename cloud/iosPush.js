@@ -16,7 +16,7 @@ Parse.Cloud.define("iosPush", function(request, response) {
 		success: function(result) {
 		  if (params.badge == "Increment") {
 		  console.log("*******************1");
-			result.increment("badge");
+			//result.increment("badge");
 		  console.log("*******************2");
 			params.badge = result.get("badge");
 		  }
