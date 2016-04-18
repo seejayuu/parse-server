@@ -26,7 +26,7 @@ function getTags(imageURL, imageID, completion) {
 				url: 'https://gateway.watsonplatform.net/visual-recognition-beta/api/v2/classify?version=2015-12-02',
 				method: 'POST',
 				formData: {
-					images_file: body
+					images_file: new Buffer(body, 'binary')
 				}
 				},
 				function(error2, res2, body2) {
