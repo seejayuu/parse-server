@@ -32,6 +32,7 @@ Parse.Cloud.define("iosPush", function(request, response) {
 		}
 	  });	
 	  response.success('success');
+  }
   catch (e) {
   	console.error(e);
   }
