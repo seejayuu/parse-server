@@ -10,8 +10,13 @@ var user = require('./util/user.js');
 var tag = require('./util/tag.js');
 var recognizer1 = require('./recognizer/clarifai/main.js');
 var recognizer2 = require('./recognizer/moodstocks/main.js');
+var recognizer3 = require('./recognizer/watson/main.js');
 
-var recognizers = [ { name: "Clarifai", module: recognizer1 }, { name: "Moodstocks", module: recognizer2 } ]
+var recognizers = [
+	{ name: "Clarifai", module: recognizer1 },
+	{ name: "Moodstocks", module: recognizer2 }
+	{ name: "Watson", module: recognizer3 }
+];
 
 Parse.Cloud.afterSave("Post", function(request) {
 	// see if user has Smart Tags enabled
