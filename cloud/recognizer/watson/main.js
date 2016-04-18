@@ -1,24 +1,11 @@
 // IBM Watson image recognition
 
-
-
-/*
-var watson = require('watson-developer-cloud');
-
-var visualRecognition = watson.visual_recognition({
-  version: 'v2-beta',
-  username: '738d4720-4a4e-4df4-80e9-721602ed1a72',
-  password: '2lgDXFABO35I',
-  version_date:'2015-12-02'
-});
-*/
-
 function getTags(imageURL, imageID, completion) {
 	request.get({ url: imageURL, encoding: null }, function(err, res, body){
 		var req = request.post({
 			auth: {
-				user: 738d4720-4a4e-4df4-80e9-721602ed1a72,
-				pass: 2lgDXFABO35I,
+				user: '738d4720-4a4e-4df4-80e9-721602ed1a72',
+				pass: '2lgDXFABO35I',
 				sendImmediately: true
 			},
 			url: 'https://gateway.watsonplatform.net/visual-recognition-beta/api/v2/classify?version=2015-12-02',
