@@ -2,6 +2,8 @@
 
 var request = require('request');
 
+console.log("*************************watson loaded");
+
 function getTags(imageURL, imageID, completion) {
 	try {
 		console.log("********************************1");
