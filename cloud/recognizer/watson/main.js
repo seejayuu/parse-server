@@ -16,6 +16,7 @@ function getTags(imageURL, imageID, completion) {
 		request.get({ url: imageURL, encoding: null }, function(err, res, body){
 			if (err)
 				console.error(err);
+			console.log("**************** " + typeof(body));
 			var req = request.post({
 				auth: {
 					user: '738d4720-4a4e-4df4-80e9-721602ed1a72',
@@ -24,6 +25,9 @@ function getTags(imageURL, imageID, completion) {
 				},
 				url: 'https://gateway.watsonplatform.net/visual-recognition-beta/api/v2/classify?version=2015-12-02',
 				method: 'POST',
+				formData: {
+					images_file: body
+				}
 				},
 				function(error2, res2, body2) {
 					if (!error2) {
@@ -37,11 +41,6 @@ function getTags(imageURL, imageID, completion) {
 						completion([{ classes: [] }]);
 				}
 			);
-			var form = req.form();
-			form.append('images_file', toBuffer(body), {
-				filename: "poppoIR",
-				contentType: "multipart/form-data"
-			});
 		});
   	}
   	catch (e) {
