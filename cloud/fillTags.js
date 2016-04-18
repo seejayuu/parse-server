@@ -14,7 +14,7 @@ var recognizer3 = require('./recognizer/watson/main.js');
 
 var recognizers = [
 	{ name: "Clarifai", module: recognizer1 },
-	{ name: "Moodstocks", module: recognizer2 }
+	{ name: "Moodstocks", module: recognizer2 },
 	{ name: "Watson", module: recognizer3 }
 ];
 
