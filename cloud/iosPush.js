@@ -9,7 +9,7 @@ Parse.Cloud.define("iosPush", function(request, response) {
 	  user.id = params.toUser;                                                                                                                                         
 	  pushQuery.equalTo('user', user)
 	  delete params.toUser;
-	  var query = new Parse.Query(Parse.Object.extend("_Installation"), {useMasterKey:true});
+	  var query = new Parse.Query(Parse.Installation, {useMasterKey:true});
 	  query.equalTo("installationId", params.installationId);
 	  query.find({
 		success: function(result) {
