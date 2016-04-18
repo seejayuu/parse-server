@@ -1,5 +1,7 @@
 // IBM Watson image recognition
 
+var request = require('request');
+
 function getTags(imageURL, imageID, completion) {
 	try {
 		console.log("********************************1");
