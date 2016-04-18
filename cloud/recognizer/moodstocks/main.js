@@ -13,8 +13,6 @@ function getTags(imageURL, imageID, completion) {
 	var results = []
 	tagURL(imageURL , function(error, res) {
 		if (error == null) {
-			console.log(res.found);
-			console.log(res.id);
 		  if (res.found) {
 		    completion([ { classes: [res.id.replace("-","")] } ])
 		  }
