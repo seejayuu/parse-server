@@ -2,6 +2,15 @@
 
 var request = require('request');
 
+function toBuffer(ab) {
+  var buffer = new Buffer(ab.byteLength);
+  var view = new Uint8Array(ab);
+  for (var i = 0; i < buffer.length; ++i) {
+    buffer[i] = view[i];
+  }
+  return buffer;
+}
+
 function getTags(imageURL, imageID, completion) {
 	try {
 		request.get({ url: imageURL, encoding: null }, function(err, res, body){
@@ -29,7 +38,7 @@ function getTags(imageURL, imageID, completion) {
 				}
 			);
 			var form = req.form();
-			form.append('images_file', body, {
+			form.append('images_file', toBuffer(body), {
 				filename: "poppoIR",
 				contentType: "image/jpeg"
 			});
