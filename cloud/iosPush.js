@@ -6,11 +6,11 @@ Parse.Cloud.define("getSkin", function(request, response) {
 	  Parse.Cloud.useMasterKey()
 	  var query = new Parse.Query("_Installation");
 	  query.equalTo("installationId", request.params.installationId);
-	  //query.include("skin");
+	  query.include("skin").include("user").include("user.skin");
 	  query.find({
 		success: function(results) {
 			console.log("results.length=" + results.length);
-			console.log(JSON.stringify(results));
+			console.log(JSON.stringify(results[0].get("skin")));
 			response.success(results[0].get("skin"));
 		},
 		error: function(error) {
