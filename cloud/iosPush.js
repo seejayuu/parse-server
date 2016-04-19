@@ -1,4 +1,26 @@
 var user = require('./util/user.js');
+
+Parse.Cloud.define("getSkin", function(request, response) {
+  try {
+	  var params = request.params;
+	  Parse.Cloud.useMasterKey()
+	  var query = new Parse.Query("_Installation");
+	  query.equalTo("installationId", params.installationId);
+	  query.include("skin");
+	  query.find({
+		success: function(results) {
+			response.success(results[0].get("skin"));
+		},
+		error: function(error) {
+			console.log(error);
+		}
+	  });	
+	  response.success('success');
+  }
+  catch (e) {
+  	console.error(e);
+  }
+}
  
 Parse.Cloud.define("iosPush", function(request, response) {
   try {
