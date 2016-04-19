@@ -10,7 +10,7 @@ Parse.Cloud.define("getSkin", function(request, response) {
 	  query.find({
 		success: function(results) {
 			console.log("results.length=" + results.length);
-			console.log(JSON.stringify(results[0]);
+			console.log(JSON.stringify(results[0]));
 			response.success(results[0].get("skin"));
 		},
 		error: function(error) {
