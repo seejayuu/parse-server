@@ -15,12 +15,11 @@ Parse.Cloud.define("getSkin", function(request, response) {
 			console.log(error);
 		}
 	  });	
-	  response.success('success');
   }
   catch (e) {
-  	console.error(e);
+	console.error(e);
   }
-}
+});
  
 Parse.Cloud.define("iosPush", function(request, response) {
   try {
