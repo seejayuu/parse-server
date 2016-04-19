@@ -3,10 +3,9 @@ var user = require('./util/user.js');
 Parse.Cloud.define("getSkin", function(request, response) {
 	console.log("*************getSkin installationId=" + request.params.installationId);
   try {
-	  var params = request.params;
 	  Parse.Cloud.useMasterKey()
 	  var query = new Parse.Query("_Installation");
-	  query.equalTo("installationId", params.installationId);
+	  query.equalTo("installationId", request.params.installationId);
 	  query.include("skin");
 	  query.find({
 		success: function(results) {
