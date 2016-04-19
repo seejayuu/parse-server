@@ -1,7 +1,7 @@
 var user = require('./util/user.js');
 
 Parse.Cloud.define("getSkin", function(request, response) {
-	console.log("*************getSkin installationId=" /*+ request.params.installationId */);
+	console.log("*************getSkin installationId=" + request.params);
   try {
 	  var params = request.params;
 	  Parse.Cloud.useMasterKey()
