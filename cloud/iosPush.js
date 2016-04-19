@@ -6,9 +6,10 @@ Parse.Cloud.define("getSkin", function(request, response) {
 	  Parse.Cloud.useMasterKey()
 	  var query = new Parse.Query("_Installation");
 	  query.equalTo("installationId", request.params.installationId);
-	  query.include("skin");
+	  //query.include("skin");
 	  query.find({
 		success: function(results) {
+			console.log("results.length=" + results.length);
 			console.log(JSON.stringify(results));
 			response.success(results[0].get("skin"));
 		},
@@ -39,17 +40,13 @@ Parse.Cloud.define("iosPush", function(request, response) {
 			try {
 				var result = results[0];
 		  if (params.badge == "Increment") {
-		  console.log("*******************1");
 			result.increment("badge");
-		  console.log("*******************2");
 			params.badge = result.get("badge");
 		  }
 		  else
 			result.set("badge", params.badge);
 		  delete params.installationId;
-		  console.log("*******************3");
 		  result.save();
-		  console.log("*******************4");
 		  Parse.Push.send({
 			where: pushQuery, // Set our Installation query                                                                                                                                                              
 			data: params
