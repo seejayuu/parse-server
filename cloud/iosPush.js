@@ -9,9 +9,12 @@ Parse.Cloud.define("getSkin", function(request, response) {
 	  query.include("skin").include("user").include("user.skin");
 	  query.find({
 		success: function(results) {
-			console.log("results.length=" + results.length);
-			console.log(JSON.stringify(results[0]));
-			response.success(results[0].get("skin"));
+			var result = results[0];
+			var installationSkin = result.get("skin");
+			if (!installationSkin)
+				installationSkin = result.get("user").get("skin");
+			console.log(JSON.stringify(installationSkin));
+			response.success(installationSkin);
 		},
 		error: function(error) {
 			console.log(error);
