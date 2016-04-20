@@ -8,6 +8,7 @@ Parse.Cloud.define("newNotifications", function(request, response) {
 	query.find({
 		success: function(results) {
 			if (results.length > 0) {
+				console.log("Notification Log test: user=" + request.user + " status=" + results.length);
 				response.success(true)
 			}
 			else {
@@ -18,7 +19,7 @@ Parse.Cloud.define("newNotifications", function(request, response) {
 				query.limit = 1;
 				query.find({
 					success: function(logResults) {
-						console.log("Notification test: user=" + request.user + " status=" + logResults.length);
+						console.log("Notification Log test: user=" + request.user + " status=" + logResults.length);
 						response.success(logResults.length > 0);
 					},
 					error: function(error) {
