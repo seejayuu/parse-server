@@ -1,8 +1,8 @@
 Parse.Cloud.define("newNotifications", function(request, response) {
 	console.log("newNotifications: " + JSON.stringify(request.params));
 	var userId = request.user.id;
-	var query = new Parse.Query(Parse.Object.extend('Notification'));
-	query.equalTo("to", userId);
+	var query = new Parse.Query('Notification');
+	query.equalTo("to", request.user);
 	query.greaterThan("createdAt", new Date(request.params.lastTime.iso));
 	query.limit = 1;
 	query.find({
