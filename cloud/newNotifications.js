@@ -4,7 +4,7 @@ Parse.Cloud.define("newNotifications", function(request, response) {
 	var query = new Parse.Query('Notification');
 	query.equalTo("to", userId);
 	query.greaterThan("createdAt", new Date(request.params.lastTime.iso));
-	query.limit = 1;
+	//query.limit = 1;
 	query.find({
 		success: function(results) {
 			if (results.length > 0) {
