@@ -1,4 +1,5 @@
 Parse.Cloud.define("newNotifications", function(request, response) {
+	console.log("newNotifications: " + JSON.stringify(request.params));
 	var userId = Parse.User.current();
 	var query = new Parse.Query('Notification');
 	query.equalTo("to", userId);
