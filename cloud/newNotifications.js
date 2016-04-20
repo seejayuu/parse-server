@@ -1,6 +1,9 @@
 Parse.Cloud.define("newNotifications", function(request, response) {
 	console.log("newNotifications: " + JSON.stringify(request.params));
 	var userId = Parse.User.current();
+	
+	console.log("user = " + userId + " user=" + request.user.id);
+	
 	var query = new Parse.Query('Notification');
 	query.equalTo("to", userId);
 	query.greaterThan("createdAt", new Date(request.params.lastTime.iso));
@@ -8,7 +11,7 @@ Parse.Cloud.define("newNotifications", function(request, response) {
 	query.find({
 		success: function(results) {
 			if (results.length > 0) {
-				console.log("Notification test: user=" + JSON.stringify(request.user) + " status=" + results.length);
+				console.log("Notification test: user=" + JSON.stringify(request.user.id) + " status=" + results.length);
 				response.success(true)
 			}
 			else {
@@ -19,7 +22,7 @@ Parse.Cloud.define("newNotifications", function(request, response) {
 				query.limit = 1;
 				query.find({
 					success: function(logResults) {
-						console.log("Notification Log test: user=" + JSON.stringify(request.user) + " status=" + logResults.length);
+						console.log("Notification Log test: user=" + JSON.stringify(request.user.id) + " status=" + logResults.length);
 						response.success(logResults.length > 0);
 					},
 					error: function(error) {
