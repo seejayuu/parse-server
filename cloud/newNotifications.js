@@ -1,6 +1,5 @@
 Parse.Cloud.define("newNotifications", function(request, response) {
 	console.log("newNotifications: " + JSON.stringify(request.params));
-	var userId = request.user.id;
 	var query = new Parse.Query('Notification');
 	query.equalTo("to", request.user);
 	query.greaterThan("createdAt", new Date(request.params.lastTime.iso));
@@ -14,7 +13,7 @@ Parse.Cloud.define("newNotifications", function(request, response) {
 			else {
 				// now count logged views if there are no notifications
 				var query = new Parse.Query('Log');
-				query.equalTo("to", userId);
+				query.equalTo("to", request.user);
 				query.greaterThan("createdAt", new Date(request.params.lastTime.iso));
 				query.limit = 1;
 				query.find({
