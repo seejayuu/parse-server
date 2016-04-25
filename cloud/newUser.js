@@ -82,7 +82,7 @@ function makeAlbumTitle(album) {
 	try {
 		var timeStart = new Date(album[0].date.iso);
 		var timeEnd = new Date(album[album.length -1].date.iso);
-		var hourDiff - timeEnd - timeStart;
+		var hourDiff = timeEnd - timeStart;
 		var secDiff = hourDiff / 1000; //in s
 		var minDiff = hourDiff / 60 / 1000; //in minutes
 		var hDiff = hourDiff / 3600 / 1000; //in hours
