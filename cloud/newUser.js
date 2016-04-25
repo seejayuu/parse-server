@@ -38,7 +38,7 @@ Parse.Cloud.define("newUser", function(request, response) {
 				album.save(null, {
 					success: function(album) {
 						console.log("******* album saved, length = " + albumContents.length);
-						if (albumContents.length > MAX_PHOTO_PER_ALBUM)
+						if (albumContents.length > MAX_PHOTOS_PER_ALBUM)
 							albumContents.length = MAX_PHOTOS_PER_ALBUM;
 						console.log("*****************");
 						_.each(albumContents, function(post) {
