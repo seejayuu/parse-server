@@ -16,7 +16,6 @@ function getTags(imageURL, imageID, completion) {
 		request.get({ url: imageURL, encoding: null }, function(err, res, body){
 			if (err)
 				console.error(err);
-			console.log("**************** " + typeof(body));
 			var req = request.post({
 				auth: {
 					user: '738d4720-4a4e-4df4-80e9-721602ed1a72',

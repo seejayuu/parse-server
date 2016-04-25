@@ -6,6 +6,7 @@ var MAX_PHOTOS_PER_ALBUM = 2
 Parse.Cloud.define("newUser", function(request, response) {
 	var thisUser = request.user;
 	var locations = [];
+	console.log("*****newUser photo count=" + request.params.roll.length);
 	// find all the locations in the camera roll, count the photos at each location, find length of time at location
 	// { id: unique_id, location: location_string, date: time_taken }
 	var albums = _.groupBy(request.params.roll, function(a) { return a.location }).sortBy(function(b) { -b.length });
@@ -47,8 +48,6 @@ Parse.Cloud.define("newUser", function(request, response) {
 	});
 	response.success("Success");
 });
-
-console.log("******************** " + __dirname + "/data/geocode.db");
 
 var geocoder = require('offline-geocoder')({ database: __dirname + "/data/geocode.db" });
 
