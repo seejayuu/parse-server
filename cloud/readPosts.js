@@ -16,14 +16,14 @@ Parse.Cloud.define("readPosts", function(request, response) {
 	// get the current users's posts
 	function queryPost1() {
 		var query = getQuery("Post");
-		query.equalTo("createdBy", user).equalTo("type", "post").equalTo("createdBy", user).include("createdBy");
+		query.equalTo("createdBy", user).equalTo("type", "post").include("createdBy");
 		return query.find();
 	}
 
 	// get posts for users the current user is following
 	function queryPost2() {
 		var query = getQuery("Follow");
-		query.include("to").equalTo("from", user).exists("to").notEqualTo("to", user);
+		query.equalTo("from", user).exists("to").notEqualTo("to", user).include("to");
 		return query.find().then(function(results) {
 			try {
 				var users = _.filter(results, function(a) { return typeof(a) != "undefined" }).map(function(a) { return a.get("to")})
