@@ -103,7 +103,7 @@ function makeAlbumTitle(album) {
 			return holiday[0].name + " " + year;
 		}
 		// todo: variable holidays: Memorial Day, Easter, Labor Day, Thanksgiving
-		if (starthour >= 6 && startHour + hDiff < 12)
+		if (startHour >= 6 && startHour + hDiff < 12)
 			return "A morning in " + location;
 		if (startHour >= 12 && startHour + hDiff < 18)
 			return "An afternoon in " + location;
