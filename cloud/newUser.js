@@ -7,11 +7,9 @@ Parse.Cloud.define("newUser", function(request, response) {
 	var thisUser = request.user;
 	var locations = [];
 	console.log("*****newUser photo count=" + request.params.roll.length);
-	console.log("******first photo: " + JSON.stringify(request.params.roll[0]));
 	// find all the locations in the camera roll, count the photos at each location, find length of time at location
 	// { id: unique_id, location: location_string, date: time_taken }
 	var count = 0;
-		console.log("****************");
 	_.each(request.params.roll, function(a) { reverseGeocode(a.location, function(geo) { a.reverseLocation = geo; if (++count >= request.params.roll.length) geoDone(); }) });
 	function geoDone() {
 		var albums = _.groupBy(request.params.roll, function(a) { return a.reverseLocation })
@@ -63,7 +61,10 @@ Parse.Cloud.define("newUser", function(request, response) {
 var geocoder = require('offline-geocoder')({ database: __dirname + "/data/geocode.db" });
 
 function reverseGeocode(location, callback) {
-	geocoder.reverse(location.latitude, location.longitude).then(function(result) { callback(result) });
+	if (typeof(location.latitude) == "undefined" || typeof(location.longitude) == "undefined")
+		callback("");
+	else
+		geocoder.reverse(location.latitude, location.longitude).then(function(result) { callback(result) });
 }
 
 
