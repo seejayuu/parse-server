@@ -63,7 +63,7 @@ var geocoder = require('offline-geocoder')({ database: __dirname + "/data/geocod
 
 function reverseGeocode(location, callback) {
 	console.log("**** geo lookup lat=" + location.latitude + " long=" + location.longitude);
-	geocoder.reverse(location.latitude, location.longitude).then(callback(result));
+	geocoder.reverse(location.latitude, location.longitude).then(function(result) { callback(result) });
 }
 
 
