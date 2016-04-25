@@ -74,9 +74,11 @@ Parse.Cloud.define("newUser", function(request, response) {
 	query.equalTo("type", "group").equalTo("createdBy", "EM0YoC7bp3");
 	query.find({
   		success: function(groups) {
+  			console.log("********* group count=" + groups.length);
   			var user = new Parse.User();
 	  		user.id = params.toUser;  
   			for (var i=0; i < groups.length; i++) {
+  				console.log("****** " + i);
   				var group = groups[i];
 				var Follow = Parse.Object.extend("Follow");
 				var follow = new Follow();
