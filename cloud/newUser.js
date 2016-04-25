@@ -32,6 +32,7 @@ Parse.Cloud.define("newUser", function(request, response) {
 			album.set("type", "album");
 			album.set("comments", 0);
 			album.set("createdBy", thisUser);
+			album.set("backgroundPersistentID", albumContents[0].id);
 			var albumTitle = makeAlbumTitle(albumContents);
 			album.set("title", albumTitle);
 			album.setACL(worldACL);
