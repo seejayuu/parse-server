@@ -19,17 +19,20 @@ Parse.Cloud.define("newUser", function(request, response) {
 		console.log("Album: " + albumContents[0].location + " " + albumContents.length + " photos");
 		// sort by date earliest to latest
 		albumContents = _.sortBy(album, function(a) { a.date });
-		var album = Parse.Object.extend("Album");
+		var Album = Parse.Object.extend("Album");
+		var album = new Album();
 		var worldACL = new Parse.ACL();
 		worldACL.setPublicReadAccess(true);
 		worldACL.setPublicWriteAccess(true);
 		album.setACL(worldACL);
+		console.log("******** saving album: " + makeAlbumTitle(albumContents));
 		album.save({ type: "album", title: makeAlbumTitle(albumContents), comments: 0, likes: 0 } , {
 			success: function(album) {
 				if (albumContents.length > MAX_PHOTO_PER_ALBUM)
 					albumContents.length = MAX_PHOTOS_PER_ALBUM;
 				_.each(albumContents, function(post) {
-					var post = Parse.Object.extend("Post");
+					var Post = Parse.Object.extend("Post");
+					var post = new Post();
 					post.set("type", "post");
 					post.set("views", 0);
 					post.set("comments", 0);
