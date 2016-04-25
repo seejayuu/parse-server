@@ -11,8 +11,9 @@ Parse.Cloud.define("newUser", function(request, response) {
 	// { id: unique_id, location: location_string, date: time_taken }
 	var count = 0;
 	for (var i=0; i < request.params.roll.length; i++) {
-		var captured_i = i;
-		reverseGeocode(request.params.roll[i].location, function(geo) { request.params.roll[captured_i].reverseLocation = geo; if (++count >= request.params.roll.length) geoDone(); });
+		(function(i) {
+			reverseGeocode(request.params.roll[i].location, function(geo) { request.params.roll[i].reverseLocation = geo; if (++count >= request.params.roll.length) geoDone(); });
+		})(i);
 	}
 	function geoDone() {
 		var albums = _.groupBy(request.params.roll, function(a) { return a.reverseLocation })
