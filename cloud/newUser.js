@@ -6,7 +6,7 @@ var MAX_PHOTOS_PER_ALBUM = 2
 Parse.Cloud.define("newUser", function(request, response) {
 	var thisUser = request.user;
 	var locations = [];
-	console.log("*****newUser photo count=" + request.params.roll.length);
+	console.log("newUser photo count=" + request.params.roll.length);
 	// find all the locations in the camera roll, count the photos at each location, find length of time at location
 	// { id: unique_id, location: location_string, date: time_taken }
 	var count = 0;
@@ -23,39 +23,46 @@ Parse.Cloud.define("newUser", function(request, response) {
 		_.each(albums, function(albumContents) {
 			console.log("Album: " + albumContents[0].reverseLocation + " " + albumContents.length + " photos");
 			// sort by date earliest to latest
-			albumContents = _.sortBy(album, function(a) { a.date });
+			albumContents = _.sortBy(albumContents, function(a) { a.date });
+			console.log("******** 1");
 			var Album = Parse.Object.extend("Album");
+			console.log("******** 1");
 			var album = new Album();
 			var worldACL = new Parse.ACL();
+			console.log("******** 1");
 			worldACL.setPublicReadAccess(true);
+			console.log("******** 1");
 			worldACL.setPublicWriteAccess(true);
+			console.log("******** 1");
 			album.setACL(worldACL);
-			console.log("******** saving album: " + makeAlbumTitle(albumContents));
-			album.save({ type: "album", title: makeAlbumTitle(albumContents), comments: 0, likes: 0 } , {
-				success: function(album) {
-					if (albumContents.length > MAX_PHOTO_PER_ALBUM)
-						albumContents.length = MAX_PHOTOS_PER_ALBUM;
-					_.each(albumContents, function(post) {
-						var Post = Parse.Object.extend("Post");
-						var post = new Post();
-						post.set("type", "post");
-						post.set("views", 0);
-						post.set("comments", 0);
-						post.set("likes", 0);
-						post.set("postedAt", post.date);
-						post.set("persistentID", post.id);
-						post.setACL(worldACL);
-						reverseGeocode(albumContents[0].location, function(result) {
-							console.log("******* Geolocation: " + result);
-							post.set("location", result);
+			(function(reverseLocation) {
+				album.save({ type: "album", title: reverseLocation, comments: 0, likes: 0 } , {
+					success: function(album) {
+						if (albumContents.length > MAX_PHOTO_PER_ALBUM)
+							albumContents.length = MAX_PHOTOS_PER_ALBUM;
+						_.each(albumContents, function(post) {
+							console.log("saving photo: " + post.id + " album: " + reverseLocation);
+							var Post = Parse.Object.extend("Post");
+							var post = new Post();
+							post.set("type", "post");
+							post.set("title", reverseLocation);
+							post.set("views", 0);
+							post.set("comments", 0);
+							post.set("likes", 0);
+							post.set("postedAt", post.date);
+							post.set("persistentID", post.id);
+							post.setACL(worldACL);
+							post.set("location", post.location);
+							var relation = post.relation("albums");
+							relation.add(album);
 							post.save();
 						});
-					});
-				},
-				error: function(album, error) {
-					console.error("************ newUser: error creating album: " + JSON.stringify(error));
-				}
-			});
+					},
+					error: function(album, error) {
+						console.error("************ newUser: error creating album: " + JSON.stringify(error));
+					}
+				});
+			})(makeAlbumTitle(albumContents));
 		});
 	}
 	response.success("Success");
