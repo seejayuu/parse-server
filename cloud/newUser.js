@@ -11,7 +11,7 @@ Parse.Cloud.define("newUser", function(request, response) {
 	// find all the locations in the camera roll, count the photos at each location, find length of time at location
 	// { id: unique_id, location: location_string, date: time_taken }
 	var count = 0;
-	_.each(request,params.roll, function(a) { reverseGeocode(a.location, function(geo) { a.reverseLocation = geo; if (++count >= request.params.roll.length) geoDone(); }) });
+	_.each(request.params.roll, function(a) { reverseGeocode(a.location, function(geo) { a.reverseLocation = geo; if (++count >= request.params.roll.length) geoDone(); }) });
 	function geoDone() {
 		var albums = _.groupBy(request.params.roll, function(a) { return a.reverseLocation })
 		albums = _.sortBy(albums, function(b) { -b.length });
