@@ -77,8 +77,6 @@ Parse.Cloud.define("newUser", function(request, response) {
 	query.find({
   		success: function(groups) {
   			console.log("********* group count=" + groups.length);
-  			var user = new Parse.User();
-	  		user.id = params.toUser;  
   			for (var i=0; i < groups.length; i++) {
   				console.log("****** " + i);
   				var group = groups[i];
@@ -89,7 +87,7 @@ Parse.Cloud.define("newUser", function(request, response) {
 				worldACL.setPublicWriteAccess(true);
 				follow.setACL(worldACL);
 				follow.set("type", "ag");
-				follow.set("from", user);
+				follow.set("from", owner);
 				follow.set("to", thisUser);
 				follow.set("toAlbumGroup", group);
 				console.log("Sharing group: " + group.get("title"));
