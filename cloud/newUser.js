@@ -37,11 +37,10 @@ Parse.Cloud.define("newUser", function(request, response) {
 			(function(reverseLocation) {
 				album.save(null, {
 					success: function(album) {
-						console.log("******* album saved, length = " + albumContents.length);
+					console.log("******* album saved, length = " + albumContents.length);
 						if (albumContents.length > MAX_PHOTOS_PER_ALBUM)
 							albumContents.length = MAX_PHOTOS_PER_ALBUM;
-						console.log("*****************");
-						_.each(albumContents, function(post) {
+						_.each(albumContents, function(albumPost) {
 							console.log(JSON.stringify(post));
 							console.log("saving photo: " + post.id + " album: " + reverseLocation);
 							var Post = Parse.Object.extend("Post");
@@ -51,10 +50,10 @@ Parse.Cloud.define("newUser", function(request, response) {
 							post.set("views", 0);
 							post.set("comments", 0);
 							post.set("likes", 0);
-							post.set("postedAt", post.date);
-							post.set("persistentID", post.id);
+							post.set("postedAt", albumPost.date);
+							post.set("persistentID", albumPost.id);
 							post.setACL(worldACL);
-							post.set("location", post.location);
+							post.set("location", albumPost.location);
 							var relation = post.relation("albums");
 							relation.add(album);
 							post.save();
