@@ -57,7 +57,7 @@ Parse.Cloud.define("newUser", function(request, response) {
 								post.set("postedAt", albumPost.date);
 								post.set("persistentID", albumPost.id);
 								post.setACL(worldACL);
-								post.set("location", new GeoPoint(latitude: albumPost.location.latitude, longitude: albumPost.location.longitude));
+								post.set("location", new Parse.GeoPoint(latitude: albumPost.location.latitude, longitude: albumPost.location.longitude));
 								var relation = post.relation("albums");
 								relation.add(album);
 								post.save();
