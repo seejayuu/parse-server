@@ -1,7 +1,7 @@
 var _ = require("underscore");
 
-var MAX_ALBUMS = 6
-var MAX_PHOTOS_PER_ALBUM = 100
+var MAX_ALBUMS = 2
+var MAX_PHOTOS_PER_ALBUM = 2
 
 Parse.Cloud.define("newUser", function(request, response) {
 	var thisUser = request.user;
@@ -30,11 +30,14 @@ Parse.Cloud.define("newUser", function(request, response) {
 					post.set("views", 0);
 					post.set("comments", 0);
 					post.set("likes", 0);
-					post.set("location", post.location);
 					post.set("postedAt", post.date);
 					post.set("persistentID", post.id);
 					post.setACL(worldACL);
-					post.save();
+					reverseGeocode(albumContents[0].location, function(result) {
+						console.log("******* Geolocation: " + result);
+						post.set("location", result);
+						post.save();
+					});
 				});
 			},
 			error: function(album, error) {
@@ -44,6 +47,14 @@ Parse.Cloud.define("newUser", function(request, response) {
 	});
 	response.success("Success");
 });
+
+var geocoder = require('offline-geocoder')({ database: "./data/geocode.db" });
+
+function reverseGeocode(location, callback) {
+	console.log("**** geo lookup lat=" + location.latitude + " long=" + location.longitude);
+	geocoder.reverse(location.latitude, location.longitude).then(callback(result));
+}
+
 
 function makeAlbumTitle(album) {
 	// album is already sorted earliest to latest
