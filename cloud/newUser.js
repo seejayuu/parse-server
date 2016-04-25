@@ -31,6 +31,7 @@ Parse.Cloud.define("newUser", function(request, response) {
 			worldACL.setPublicWriteAccess(true);
 			album.set("type", "album");
 			album.set("comments", 0);
+			album.set("createdBy", thisUser);
 			var albumTitle = makeAlbumTitle(albumContents);
 			album.set("title", albumTitle);
 			album.setACL(worldACL);
@@ -41,7 +42,7 @@ Parse.Cloud.define("newUser", function(request, response) {
 						if (albumContents.length > MAX_PHOTOS_PER_ALBUM)
 							albumContents.length = MAX_PHOTOS_PER_ALBUM;
 						_.each(albumContents, function(albumPost) {
-							console.log(JSON.stringify(post));
+							console.log(JSON.stringify(albumPost));
 							console.log("saving photo: " + post.id + " album: " + reverseLocation);
 							var Post = Parse.Object.extend("Post");
 							var post = new Post();
@@ -50,6 +51,7 @@ Parse.Cloud.define("newUser", function(request, response) {
 							post.set("views", 0);
 							post.set("comments", 0);
 							post.set("likes", 0);
+							post.set("createdBy", thisUser);
 							post.set("postedAt", albumPost.date);
 							post.set("persistentID", albumPost.id);
 							post.setACL(worldACL);
