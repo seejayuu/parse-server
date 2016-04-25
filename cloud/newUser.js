@@ -65,8 +65,15 @@ var geocoder = require('offline-geocoder')({ database: __dirname + "/data/geocod
 function reverseGeocode(location, callback) {
 	if (typeof(location.latitude) == "undefined" || typeof(location.longitude) == "undefined")
 		callback("");
-	else
-		geocoder.reverse(location.latitude, location.longitude).then(function(result) { callback(result) });
+	else {
+		try {
+			geocoder.reverse(location.latitude, location.longitude).then(function(result) { callback(result) });
+		}
+		catch (e) {
+			console.error("**** geocoder error: " + JSON.stringify(error));
+			callback("");
+		}
+	}
 }
 
 
