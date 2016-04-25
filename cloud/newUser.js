@@ -43,23 +43,28 @@ Parse.Cloud.define("newUser", function(request, response) {
 						if (albumContents.length > MAX_PHOTOS_PER_ALBUM)
 							albumContents.length = MAX_PHOTOS_PER_ALBUM;
 						_.each(albumContents, function(albumPost) {
-							console.log(JSON.stringify(albumPost));
-							console.log("saving photo: " + albumPost.id + " album: " + reverseLocation);
-							var Post = Parse.Object.extend("Post");
-							var post = new Post();
-							post.set("type", "post");
-							post.set("title", reverseLocation);
-							post.set("views", 0);
-							post.set("comments", 0);
-							post.set("likes", 0);
-							post.set("createdBy", thisUser);
-							post.set("postedAt", albumPost.date);
-							post.set("persistentID", albumPost.id);
-							post.setACL(worldACL);
-							post.set("location", albumPost.location);
-							var relation = post.relation("albums");
-							relation.add(album);
-							post.save();
+							try {
+								console.log(JSON.stringify(albumPost));
+								console.log("saving photo: " + albumPost.id + " album: " + reverseLocation);
+								var Post = Parse.Object.extend("Post");
+								var post = new Post();
+								post.set("type", "post");
+								post.set("title", reverseLocation);
+								post.set("views", 0);
+								post.set("comments", 0);
+								post.set("likes", 0);
+								post.set("createdBy", thisUser);
+								post.set("postedAt", albumPost.date);
+								post.set("persistentID", albumPost.id);
+								post.setACL(worldACL);
+								post.set("location", albumPost.location);
+								var relation = post.relation("albums");
+								relation.add(album);
+								post.save();
+							}
+							catch (e) {
+								console.error(e);
+							}
 						});
 					},
 					error: function(album, error) {
