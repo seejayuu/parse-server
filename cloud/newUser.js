@@ -7,9 +7,11 @@ Parse.Cloud.define("newUser", function(request, response) {
 	var thisUser = request.user;
 	var locations = [];
 	console.log("*****newUser photo count=" + request.params.roll.length);
+	console.log("******first photo: " + JSON.stringify(request.params.roll[0]);
 	// find all the locations in the camera roll, count the photos at each location, find length of time at location
 	// { id: unique_id, location: location_string, date: time_taken }
 	var albums = _.groupBy(request.params.roll, function(a) { return a.location }).sortBy(function(b) { -b.length });
+	console.log("****************");
 	if (albums.length > MAX_ALBUMS)
 		albums.length = MAX_ALBUMS;
 	_.each(albums, function(albumContents) {
