@@ -5,7 +5,7 @@ var MAX_PHOTOS_PER_ALBUM = 100
 
 Parse.Cloud.define("newUser", function(request, response) {
 	var thisUser = request.user;
-	vara locations = [];
+	var locations = [];
 	// find all the locations in the camera roll, count the photos at each location, find length of time at location
 	// { id: unique_id, location: location_string, date: time_taken }
 	var albums = _.groupBy(request.params.roll, function(a) { return a.location }).sortBy(function(b) { -b.length });
