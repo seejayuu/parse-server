@@ -68,6 +68,34 @@ Parse.Cloud.define("newUser", function(request, response) {
 			})(albumTitle);
 		});
 	}
+	// now join the new user to the groups that are owned by the admin user
+	var Album = Parse.Object.extend("Album");
+	var query = new Parse.Query(Album);
+	query.equalTo(("type", "group").equalTo("createdBy", "EM0YoC7bp3");
+	query.find({
+  		success: function(groups) {
+  			var user = new Parse.User();
+	  		user.id = params.toUser;  
+  			for (var i=0; i < groups.length; i++) {
+  				var group = groups[i];
+				var Follow = Parse.Object.extend("Follow");
+				var follow = new Follow();
+				var worldACL = new Parse.ACL();
+				worldACL.setPublicReadAccess(true);
+				worldACL.setPublicWriteAccess(true);
+				follow.setACL(worldACL);
+				follow.set("type", "ag");
+				follow.set("from", user);
+				follow.set("to", thisUser);
+				follow.set("toAlbumGroup", group);
+				console.log("Sharing group: " + group.get("title"));
+				follow.save();
+			}
+		},
+  		error: function(object, error) {
+  		  console.log(error)
+		}
+	});
 	response.success("Success");
 });
 
