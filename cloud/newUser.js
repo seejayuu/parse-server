@@ -36,7 +36,7 @@ Parse.Cloud.define("newUser", function(request, response) {
 			album.setACL(worldACL);
 			(function(reverseLocation) {
 				console.log("******* album about to be saved");
-				album.save(nil, {
+				album.save(null, {
 					success: function(album) {
 						console.log("******* album saved");
 						if (albumContents.length > MAX_PHOTO_PER_ALBUM)
@@ -115,7 +115,7 @@ function makeAlbumTitle(album) {
 			return "A day in " + location;
 		if (hDiff > 4*24 && hDiff < 10*24)
 			return "A week in " + location;
-		if (hdiff > 21*24 && hDiff < 42*24)
+		if (hDiff > 21*24 && hDiff < 42*24)
 			return "A month in " + location;
 	}
 	catch (e) {
