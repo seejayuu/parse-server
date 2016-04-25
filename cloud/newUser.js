@@ -10,48 +10,52 @@ Parse.Cloud.define("newUser", function(request, response) {
 	console.log("******first photo: " + JSON.stringify(request.params.roll[0]));
 	// find all the locations in the camera roll, count the photos at each location, find length of time at location
 	// { id: unique_id, location: location_string, date: time_taken }
-	var albums = _.groupBy(request.params.roll, function(a) { return a.location })
-	albums = _.sortBy(albums, function(b) { -b.length });
-	console.log("****************");
-	if (albums.length > MAX_ALBUMS)
-		albums.length = MAX_ALBUMS;
-	_.each(albums, function(albumContents) {
-		console.log("Album: " + albumContents[0].location + " " + albumContents.length + " photos");
-		// sort by date earliest to latest
-		albumContents = _.sortBy(album, function(a) { a.date });
-		var Album = Parse.Object.extend("Album");
-		var album = new Album();
-		var worldACL = new Parse.ACL();
-		worldACL.setPublicReadAccess(true);
-		worldACL.setPublicWriteAccess(true);
-		album.setACL(worldACL);
-		console.log("******** saving album: " + makeAlbumTitle(albumContents));
-		album.save({ type: "album", title: makeAlbumTitle(albumContents), comments: 0, likes: 0 } , {
-			success: function(album) {
-				if (albumContents.length > MAX_PHOTO_PER_ALBUM)
-					albumContents.length = MAX_PHOTOS_PER_ALBUM;
-				_.each(albumContents, function(post) {
-					var Post = Parse.Object.extend("Post");
-					var post = new Post();
-					post.set("type", "post");
-					post.set("views", 0);
-					post.set("comments", 0);
-					post.set("likes", 0);
-					post.set("postedAt", post.date);
-					post.set("persistentID", post.id);
-					post.setACL(worldACL);
-					reverseGeocode(albumContents[0].location, function(result) {
-						console.log("******* Geolocation: " + result);
-						post.set("location", result);
-						post.save();
+	var count = 0;
+	_.each(request,params.roll, function(a) { reverseGeocode(a.location, function(geo) { a.reverseLocation = geo; if (++count >= request.params.roll.length) geoDone(); }) });
+	function geoDone() {
+		var albums = _.groupBy(request.params.roll, function(a) { return a.reverseLocation })
+		albums = _.sortBy(albums, function(b) { -b.length });
+		console.log("****************");
+		if (albums.length > MAX_ALBUMS)
+			albums.length = MAX_ALBUMS;
+		_.each(albums, function(albumContents) {
+			console.log("Album: " + albumContents[0].location + " " + albumContents.length + " photos");
+			// sort by date earliest to latest
+			albumContents = _.sortBy(album, function(a) { a.date });
+			var Album = Parse.Object.extend("Album");
+			var album = new Album();
+			var worldACL = new Parse.ACL();
+			worldACL.setPublicReadAccess(true);
+			worldACL.setPublicWriteAccess(true);
+			album.setACL(worldACL);
+			console.log("******** saving album: " + makeAlbumTitle(albumContents));
+			album.save({ type: "album", title: makeAlbumTitle(albumContents), comments: 0, likes: 0 } , {
+				success: function(album) {
+					if (albumContents.length > MAX_PHOTO_PER_ALBUM)
+						albumContents.length = MAX_PHOTOS_PER_ALBUM;
+					_.each(albumContents, function(post) {
+						var Post = Parse.Object.extend("Post");
+						var post = new Post();
+						post.set("type", "post");
+						post.set("views", 0);
+						post.set("comments", 0);
+						post.set("likes", 0);
+						post.set("postedAt", post.date);
+						post.set("persistentID", post.id);
+						post.setACL(worldACL);
+						reverseGeocode(albumContents[0].location, function(result) {
+							console.log("******* Geolocation: " + result);
+							post.set("location", result);
+							post.save();
+						});
 					});
-				});
-			},
-			error: function(album, error) {
-				console.error("************ newUser: error creating album: " + JSON.stringify(error));
-			}
-  		});
-	});
+				},
+				error: function(album, error) {
+					console.error("************ newUser: error creating album: " + JSON.stringify(error));
+				}
+			});
+		});
+	}
 	response.success("Success");
 });
 
