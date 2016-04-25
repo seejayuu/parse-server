@@ -71,7 +71,9 @@ Parse.Cloud.define("newUser", function(request, response) {
 	// now join the new user to the groups that are owned by the admin user
 	var Album = Parse.Object.extend("Album");
 	var query = new Parse.Query(Album);
-	query.equalTo("type", "group").equalTo("createdBy", "EM0YoC7bp3");
+	var owner = new Parse.User();
+	owner.id = "EM0YoC7bp3"; 
+	query.equalTo("type", "group").equalTo("createdBy", owner);
 	query.find({
   		success: function(groups) {
   			console.log("********* group count=" + groups.length);
