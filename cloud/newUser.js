@@ -18,27 +18,20 @@ Parse.Cloud.define("newUser", function(request, response) {
 	function geoDone() {
 		var albums = _.groupBy(request.params.roll, function(a) { return a.reverseLocation })
 		albums = _.sortBy(albums, function(b) { -b.length });
-		if (albums.length > MAX_ALBUMS)
-			albums.length = MAX_ALBUMS;
 		console.log(JSON.stringify(albums));
 		console.log("***********Album count=" + albums.length);
+		if (albums.length > MAX_ALBUMS)
+			albums.length = MAX_ALBUMS;
 		_.each(albums, function(albumContents) {
 			console.log("Album: " + albumContents[0].reverseLocation + " " + albumContents.length + " photos");
 			// sort by date earliest to latest
 			albumContents = _.sortBy(albumContents, function(a) { a.date });
-			console.log("******************1");
 			var Album = Parse.Object.extend("Album");
-			console.log("******************1");
 			var album = new Album();
-			console.log("******************1");
 			var worldACL = new Parse.ACL();
-			console.log("******************1");
 			worldACL.setPublicReadAccess(true);
-			console.log("******************1");
 			worldACL.setPublicWriteAccess(true);
-			console.log("******************1");
 			album.setACL(worldACL);
-			console.log("******************1");
 			(function(reverseLocation) {
 				console.log("******* album about to be saved");
 				album.save({ type: "album", title: reverseLocation, comments: 0, likes: 0 } , {
@@ -83,8 +76,8 @@ function reverseGeocode(location, callback) {
 
 function makeAlbumTitle(album) {
 	// album is already sorted earliest to latest
-	var timeStart = new Date(album[0].date);
-	var timeEnd = new Date(album[album.length -1].date);
+	var timeStart = new Date(album[0].date.iso);
+	var timeEnd = new Date(album[album.length -1].date.iso);
 	var secDiff = hourDiff / 1000; //in s
 	var minDiff = hourDiff / 60 / 1000; //in minutes
 	var hDiff = hourDiff / 3600 / 1000; //in hours
