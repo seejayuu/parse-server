@@ -12,7 +12,7 @@ Parse.Cloud.define("newUser", function(request, response) {
 	var count = 0;
 	for (var i=0; i < request.params.roll.length; i++) {
 		(function(i) {
-			reverseGeocode(request.params.roll[i].location, function(geo) { request.params.roll[i].reverseLocation = geo; if (++count >= request.params.roll.length) geoDone(); });
+			reverseGeocode(request.params.roll[i].location, function(geo) { request.params.roll[i].reverseLocation = geo; console.log(JSON.stringify(geo)); if (++count >= request.params.roll.length) geoDone(); });
 		})(i);
 	}
 	function geoDone() {
