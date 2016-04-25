@@ -35,13 +35,14 @@ Parse.Cloud.define("newUser", function(request, response) {
 			album.set("title", albumTitle);
 			album.setACL(worldACL);
 			(function(reverseLocation) {
-				console.log("******* album about to be saved");
 				album.save(null, {
 					success: function(album) {
-						console.log("******* album saved");
+						console.log("******* album saved, length = " + albumContents.length);
 						if (albumContents.length > MAX_PHOTO_PER_ALBUM)
 							albumContents.length = MAX_PHOTOS_PER_ALBUM;
+						console.log("*****************");
 						_.each(albumContents, function(post) {
+							console.log(JSON.stringify(post));
 							console.log("saving photo: " + post.id + " album: " + reverseLocation);
 							var Post = Parse.Object.extend("Post");
 							var post = new Post();
@@ -74,7 +75,6 @@ var geocoder = require('./util/geocoder')({ database: __dirname + "/data/geocode
 function reverseGeocode(location, callback) {
 	geocoder.reverse(location.latitude, location.longitude).then(function(result) { callback(result) });
 }
-
 
 function makeAlbumTitle(album) {
 	// album is already sorted earliest to latest
