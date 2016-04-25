@@ -40,7 +40,7 @@ Parse.Cloud.define("newUser", function(request, response) {
 			error: function(album, error) {
 				console.error("************ newUser: error creating album: " + JSON.stringify(error));
 			}
-  		}
+  		});
 	});
 	response.success("Success");
 });
