@@ -12,11 +12,8 @@ Parse.Cloud.define("newUser", function(request, response) {
 	var count = 0;
 	_.each(request.params.roll, function(a) { reverseGeocode(a.location, function(geo) { a.reverseLocation = geo; console.log(count); if (++count >= request.params.roll.length) geoDone(); }) });
 	function geoDone() {
-		console.log("****************1");
 		var albums = _.groupBy(request.params.roll, function(a) { return a.reverseLocation })
-		console.log("****************2");
 		albums = _.sortBy(albums, function(b) { -b.length });
-		console.log("****************3");
 		if (albums.length > MAX_ALBUMS)
 			albums.length = MAX_ALBUMS;
 		_.each(albums, function(albumContents) {
@@ -63,8 +60,7 @@ Parse.Cloud.define("newUser", function(request, response) {
 var geocoder = require('./util/geocoder')({ database: __dirname + "/data/geocode.db" });
 
 function reverseGeocode(location, callback) {
-		geocoder.reverse(location.latitude, location.longitude).catch(function(e){console.error("**** geocoder error: " + JSON.stringify(error));
-		callback("");}).then(function(result) { callback(result) });
+	geocoder.reverse(location.latitude, location.longitude).then(function(result) { console.log(JSON.stringify(result)); callback(result) });
 }
 
 
