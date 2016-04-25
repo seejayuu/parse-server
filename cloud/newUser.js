@@ -57,7 +57,7 @@ Parse.Cloud.define("newUser", function(request, response) {
 								post.set("postedAt", albumPost.date);
 								post.set("persistentID", albumPost.id);
 								post.setACL(worldACL);
-								post.set("location", albumPost.location);
+								post.set("location", new GeoPoint(latitude: albumPost.location.latitude, longitude: albumPost.location.longitude));
 								var relation = post.relation("albums");
 								relation.add(album);
 								post.save();
@@ -82,9 +82,7 @@ Parse.Cloud.define("newUser", function(request, response) {
 	query.equalTo("type", "group").equalTo("createdBy", owner);
 	query.find({
   		success: function(groups) {
-  			console.log("********* group count=" + groups.length);
   			for (var i=0; i < groups.length; i++) {
-  				console.log("****** " + i);
   				var group = groups[i];
 				var Follow = Parse.Object.extend("Follow");
 				var follow = new Follow();
