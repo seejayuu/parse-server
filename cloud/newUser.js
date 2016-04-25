@@ -26,12 +26,19 @@ Parse.Cloud.define("newUser", function(request, response) {
 			console.log("Album: " + albumContents[0].reverseLocation + " " + albumContents.length + " photos");
 			// sort by date earliest to latest
 			albumContents = _.sortBy(albumContents, function(a) { a.date });
+			console.log("******************1");
 			var Album = Parse.Object.extend("Album");
+			console.log("******************1");
 			var album = new Album();
+			console.log("******************1");
 			var worldACL = new Parse.ACL();
+			console.log("******************1");
 			worldACL.setPublicReadAccess(true);
+			console.log("******************1");
 			worldACL.setPublicWriteAccess(true);
+			console.log("******************1");
 			album.setACL(worldACL);
+			console.log("******************1");
 			(function(reverseLocation) {
 				console.log("******* album about to be saved");
 				album.save({ type: "album", title: reverseLocation, comments: 0, likes: 0 } , {
