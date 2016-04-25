@@ -18,8 +18,6 @@ Parse.Cloud.define("newUser", function(request, response) {
 	function geoDone() {
 		var albums = _.groupBy(request.params.roll, function(a) { return a.reverseLocation })
 		albums = _.sortBy(albums, function(b) { return -b.length });
-		for (var i = 0; i < albums.length; i++)
-			console.log("Album " + i + " length=" + albums[i].length);
 		if (albums.length > MAX_ALBUMS)
 			albums.length = MAX_ALBUMS;
 		_.each(albums, function(albumContents) {
@@ -84,6 +82,7 @@ function makeAlbumTitle(album) {
 	try {
 		var timeStart = new Date(album[0].date.iso);
 		var timeEnd = new Date(album[album.length -1].date.iso);
+		var hourDiff - timeEnd - timeStart;
 		var secDiff = hourDiff / 1000; //in s
 		var minDiff = hourDiff / 60 / 1000; //in minutes
 		var hDiff = hourDiff / 3600 / 1000; //in hours
