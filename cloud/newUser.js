@@ -76,6 +76,7 @@ function reverseGeocode(location, callback) {
 
 function makeAlbumTitle(album) {
 	// album is already sorted earliest to latest
+	try {
 	var timeStart = new Date(album[0].date.iso);
 	var timeEnd = new Date(album[album.length -1].date.iso);
 	var secDiff = hourDiff / 1000; //in s
@@ -113,6 +114,10 @@ function makeAlbumTitle(album) {
 		return "A week in " + location;
 	if (hdiff > 21*24 && hDiff < 42*24)
 		return "A month in " + location;
+	}
+	catch (e) {
+		console.error("******** ERROR: " + JSON.stringify(e));
+	}
 	return location;
 }
 
