@@ -44,7 +44,7 @@ Parse.Cloud.define("newUser", function(request, response) {
 							albumContents.length = MAX_PHOTOS_PER_ALBUM;
 						_.each(albumContents, function(albumPost) {
 							console.log(JSON.stringify(albumPost));
-							console.log("saving photo: " + post.id + " album: " + reverseLocation);
+							console.log("saving photo: " + albumPost.id + " album: " + reverseLocation);
 							var Post = Parse.Object.extend("Post");
 							var post = new Post();
 							post.set("type", "post");
