@@ -17,7 +17,7 @@ Parse.Cloud.define("newUser", function(request, response) {
 	}
 	function geoDone() {
 		var albums = _.groupBy(request.params.roll, function(a) { return a.reverseLocation })
-		albums = _.sortBy(albums, function(b) { -b.length });
+		albums = _.sortBy(albums, function(b) { return -b.length });
 		for (var i = 0; i < albums.length; i++)
 			console.log("Album " + i + " length=" + albums[i].length);
 		if (albums.length > MAX_ALBUMS)
@@ -120,7 +120,7 @@ function makeAlbumTitle(album) {
 			return "A month in " + location;
 	}
 	catch (e) {
-		console.error("******** ERROR: " + JSON.stringify(e));
+		console.error(e);
 	}
 	return location;
 }
