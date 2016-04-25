@@ -48,6 +48,8 @@ Parse.Cloud.define("newUser", function(request, response) {
 	response.success("Success");
 });
 
+console.log("******************** " + __dirname + "/data/geocode.db");
+
 var geocoder = require('offline-geocoder')({ database: __dirname + "/data/geocode.db" });
 
 function reverseGeocode(location, callback) {
