@@ -1,7 +1,7 @@
 var _ = require("underscore");
 
-var MAX_ALBUMS = 2
-var MAX_PHOTOS_PER_ALBUM = 2
+var MAX_ALBUMS = 8
+var MAX_PHOTOS_PER_ALBUM = 100
 
 Parse.Cloud.define("newUser", function(request, response) {
 	var thisUser = request.user;
@@ -16,14 +16,10 @@ Parse.Cloud.define("newUser", function(request, response) {
 		})(i);
 	}
 	function geoDone() {
-		var albums = _.groupBy(request.params.roll, function(a) { return a.reverseLocation })
-		albums = _.sortBy(albums, function(b) { return -b.length });
-		if (albums.length > MAX_ALBUMS)
-			albums.length = MAX_ALBUMS;
-		_.each(albums, function(albumContents) {
+		_.each(getAlbumSubset(request.params.roll), function(albumContents) {
 			console.log("Album: " + albumContents[0].reverseLocation + " " + albumContents.length + " photos");
 			// sort by date earliest to latest
-			albumContents = _.sortBy(albumContents, function(a) { a.date });
+			albumContents = _.sortBy(albumContents.reverse(), function(a) { a.date.iso });
 			var Album = Parse.Object.extend("Album");
 			var album = new Album();
 			var worldACL = new Parse.ACL();
@@ -160,3 +156,37 @@ function makeAlbumTitle(album) {
 	return location;
 }
 
+// get the list of albums to create albums for
+// album selection rules:
+// 1 largest
+// 1 most recent
+// 6 random
+
+function getAlbumSubset(roll) {
+	var albums = _.groupBy(roll, function(a) { return a.reverseLocation })
+	albums = _.sortBy(albums, function(b) { return -b.length });
+	var subset = albums[0];	// the biggest
+	albums.splice(0,1);	// remove it
+	var lastDate = "";
+	vasr lastIndex = 0;
+	for (var i = 0; i < albums.length; i++) {
+		if (albums[i][0].date.iso > lastDate) {
+			lastDate = albums[i][0].date.iso
+			lastIndex = i
+		}	
+	}
+	// select the album with the most recent first photo
+	if (lastDate != "") {
+		subset.push(albums[lastIndex]);
+		albums.splice(lastIndex, 1);
+	}
+	// select some random albums
+	var count = MAX_ALBUMS - 2;
+	while (albums.length > 0 && count > 0) {
+		var choice = Math.floor((Math.random() * albums.length));
+		subset.push(albums[choice]);
+		albums.splice(choice, 1);
+		count--;
+	}
+	return subset;
+}
