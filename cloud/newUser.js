@@ -123,7 +123,7 @@ function makeAlbumTitle(album) {
 		var year = timeStart.getYear();
 		var startHour = timeStart.getHours();
 		
-		console.log(("******makeAlbumTitle: start=" + timeStart + " end=" + timeEnd + " hDiff=" + hDiff + " startHour=" + startHour); 
+		console.log("******makeAlbumTitle: start=" + timeStart + " end=" + timeEnd + " hDiff=" + hDiff + " startHour=" + startHour); 
 		
 		
 		// holidays, thanksgiving, New Years, christmas July 4th etc, birthday
