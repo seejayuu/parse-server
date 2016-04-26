@@ -196,6 +196,7 @@ function getAlbumSubset(roll) {
 		var count = MAX_ALBUMS - 2;
 		while (albums.length > 0 && count > 0) {
 			var choice = Math.floor((Math.random() * albums.length));
+			console.log("******* ALBUM CHOICE LENGTH=" + albums[choice].length);
 			if (albums[choice].length >= ALBUM_SIZE_THRESHOLD) {
 				subset.push(albums[choice]);
 				albums.splice(choice, 1);
