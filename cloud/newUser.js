@@ -168,7 +168,7 @@ function getAlbumSubset(roll) {
 	var subset = albums[0];	// the biggest
 	albums.splice(0,1);	// remove it
 	var lastDate = "";
-	vasr lastIndex = 0;
+	var lastIndex = 0;
 	for (var i = 0; i < albums.length; i++) {
 		if (albums[i][0].date.iso > lastDate) {
 			lastDate = albums[i][0].date.iso
