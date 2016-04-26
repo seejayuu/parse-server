@@ -111,9 +111,11 @@ function reverseGeocode(location, callback) {
 function makeAlbumTitle(album) {
 	// album is already sorted earliest to latest
 	var location = album[0].reverseLocation;
+	if (location === undefined)
+		location = "my life";
 	try {
-		var timeStart = new Date(album[0].date.iso);
-		var timeEnd = new Date(album[album.length -1].date.iso);
+		var timeEnd = new Date(album[0].date.iso);
+		var timeStart = new Date(album[album.length -1].date.iso);
 		var hourDiff = timeEnd - timeStart;
 		var secDiff = hourDiff / 1000; //in s
 		var minDiff = hourDiff / 60 / 1000; //in minutes
