@@ -122,6 +122,10 @@ function makeAlbumTitle(album) {
 		var month = timeStart.getMonth();
 		var year = timeStart.getYear();
 		var startHour = timeStart.getHours();
+		
+		console.log(("******makeAlbumTitle: start=" + timeStart + " end=" + timeEnd + " hDiff=" + hDiff + " startHour=" + startHour); 
+		
+		
 		// holidays, thanksgiving, New Years, christmas July 4th etc, birthday
 		var holidays = [
 			{ name: "July 4th", start: "7/4", duration: 1 },
@@ -178,14 +182,14 @@ function getAlbumSubset(roll) {
 		}
 		// select the album with the most recent first photo
 		if (lastDate != "") {
-			subset.push([albums[lastIndex]]);
+			subset.push(albums[lastIndex]);
 			albums.splice(lastIndex, 1);
 		}
 		// select some random albums
 		var count = MAX_ALBUMS - 2;
 		while (albums.length > 0 && count > 0) {
 			var choice = Math.floor((Math.random() * albums.length));
-			subset.push([albums[choice]]);
+			subset.push(albums[choice]);
 			albums.splice(choice, 1);
 			count--;
 		}
