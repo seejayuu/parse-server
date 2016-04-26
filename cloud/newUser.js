@@ -169,7 +169,7 @@ function getAlbumSubset(roll) {
 		console.log("*************************");
 		albums = _.sortBy(albums, function(b) { return -b.length });
 		console.log("*************************");
-		var subset = albums[0];	// the biggest
+		var subset = [albums[0]];	// the biggest
 		console.log("*************************");
 		albums.splice(0,1);	// remove it
 		console.log("*************************");
@@ -185,7 +185,7 @@ function getAlbumSubset(roll) {
 		console.log("*************************");
 		// select the album with the most recent first photo
 		if (lastDate != "") {
-			subset.push(albums[lastIndex]);
+			subset.push([albums[lastIndex]]);
 			albums.splice(lastIndex, 1);
 		}
 		// select some random albums
@@ -193,7 +193,7 @@ function getAlbumSubset(roll) {
 		var count = MAX_ALBUMS - 2;
 		while (albums.length > 0 && count > 0) {
 			var choice = Math.floor((Math.random() * albums.length));
-			subset.push(albums[choice]);
+			subset.push([albums[choice]]);
 			albums.splice(choice, 1);
 			count--;
 		}
