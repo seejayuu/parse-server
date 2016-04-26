@@ -163,10 +163,14 @@ function makeAlbumTitle(album) {
 // 6 random
 
 function getAlbumSubset(roll) {
+	console.log("*************************");
 	try {
 		var albums = _.groupBy(roll, function(a) { return a.reverseLocation })
+		console.log("*************************");
 		albums = _.sortBy(albums, function(b) { return -b.length });
+		console.log("*************************");
 		var subset = albums[0];	// the biggest
+		console.log("*************************");
 		albums.splice(0,1);	// remove it
 		console.log("*************************");
 		var lastDate = "";
