@@ -1,7 +1,7 @@
 var _ = require("underscore");
 
 var MAX_ALBUMS = 8
-var MAX_PHOTOS_PER_ALBUM = 100
+var MAX_PHOTOS_PER_ALBUM = 2
 
 Parse.Cloud.define("newUser", function(request, response) {
 	var thisUser = request.user;
@@ -163,33 +163,25 @@ function makeAlbumTitle(album) {
 // 6 random
 
 function getAlbumSubset(roll) {
-	console.log("*************************");
 	try {
 		var albums = _.groupBy(roll, function(a) { return a.reverseLocation })
-		console.log("*************************");
 		albums = _.sortBy(albums, function(b) { return -b.length });
-		console.log("*************************");
 		var subset = [albums[0]];	// the biggest
-		console.log("*************************");
 		albums.splice(0,1);	// remove it
-		console.log("*************************");
 		var lastDate = "";
 		var lastIndex = 0;
-		console.log("*************************");
 		for (var i = 0; i < albums.length; i++) {
 			if (albums[i][0].date.iso > lastDate) {
 				lastDate = albums[i][0].date.iso
 				lastIndex = i
 			}	
 		}
-		console.log("*************************");
 		// select the album with the most recent first photo
 		if (lastDate != "") {
 			subset.push([albums[lastIndex]]);
 			albums.splice(lastIndex, 1);
 		}
 		// select some random albums
-		console.log("*************************");
 		var count = MAX_ALBUMS - 2;
 		while (albums.length > 0 && count > 0) {
 			var choice = Math.floor((Math.random() * albums.length));
