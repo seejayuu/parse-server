@@ -22,6 +22,9 @@ Parse.Cloud.define("newUser", function(request, response) {
 			console.log("Album: " + albumContents[0].reverseLocation + " " + albumContents.length + " photos");
 			// sort by date earliest to latest
 			albumContents = _.sortBy(albumContents.reverse(), function(a) { a.date.iso });
+			
+			console.log("******AlbumContents sorted: " + JSON.stringify(albumContents));		
+			
 			var Album = Parse.Object.extend("Album");
 			var album = new Album();
 			var worldACL = new Parse.ACL();
@@ -196,7 +199,6 @@ function getAlbumSubset(roll) {
 		var count = MAX_ALBUMS - 2;
 		while (albums.length > 0 && count > 0) {
 			var choice = Math.floor((Math.random() * albums.length));
-			console.log("******* ALBUM CHOICE LENGTH=" + albums[choice].length);
 			if (albums[choice].length >= ALBUM_SIZE_THRESHOLD) {
 				subset.push(albums[choice]);
 				albums.splice(choice, 1);
