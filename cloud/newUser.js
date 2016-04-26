@@ -117,8 +117,10 @@ function makeAlbumTitle(album, tzoffset) {
 		location = "my life";
 	try {
 		var millisecondOffset = tzoffset * 1000;
-		var timeEnd = new Date(album[0].date.iso) + millisecondOffset;
-		var timeStart = new Date(album[album.length -1].date.iso) + millisecondOffset;
+		var timeEnd = new Date(album[0].date.iso)
+		timeEnd.setSeconds(timeEnd.getSeconds() + millisecondOffset);
+		var timeStart = new Date(album[album.length -1].date.iso);
+		timeStart.setSeconds(timeStart.getSeconds() + millisecondOffset);
 		var hourDiff = timeEnd - timeStart;
 		var secDiff = hourDiff / 1000; //in s
 		var minDiff = secDiff / 60 
