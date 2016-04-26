@@ -46,7 +46,7 @@ Parse.Cloud.define("newUser", function(request, response) {
 								console.log("saving photo: " + albumPost.id + " album: " + reverseLocation);
 								var Post = Parse.Object.extend("Post");
 								var post = new Post();
-								post.set("type", "post");
+								post.set("type", "roll");
 								post.set("title", reverseLocation);
 								post.set("views", 0);
 								post.set("comments", 0);
