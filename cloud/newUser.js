@@ -121,9 +121,9 @@ function makeAlbumTitle(album, tzoffset) {
 	try {
 		var millisecondOffset = tzoffset * 1000;
 		var timeEnd = new Date(album[0].date.iso)
-		timeEnd.setSeconds(timeEnd.getSeconds() + millisecondOffset);
+		timeEnd.setSeconds(timeEnd.getSeconds() - millisecondOffset);
 		var timeStart = new Date(album[album.length -1].date.iso);
-		timeStart.setSeconds(timeStart.getSeconds() + millisecondOffset);
+		timeStart.setSeconds(timeStart.getSeconds() - millisecondOffset);
 		var hourDiff = timeEnd - timeStart;
 		var secDiff = hourDiff / 1000; //in s
 		var minDiff = secDiff / 60 
@@ -133,7 +133,7 @@ function makeAlbumTitle(album, tzoffset) {
 		var year = timeStart.getYear();
 		var startHour = timeStart.getHours();
 		
-		console.log("******makeAlbumTitle: start=" + timeStart + " end=" + timeEnd + " hDiff=" + hDiff + " startHour=" + startHour); 
+		console.log("******makeAlbumTitle: location=" + location + " start=" + timeStart + " end=" + timeEnd + " hDiff=" + hDiff + " startHour=" + startHour); 
 		
 		
 		// holidays, thanksgiving, New Years, christmas July 4th etc, birthday
