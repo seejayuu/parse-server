@@ -2,9 +2,11 @@ var _ = require("underscore");
 
 var MAX_ALBUMS = 8
 var MAX_PHOTOS_PER_ALBUM = 2
+var ALBUM_SIZE_THRESHOLD = 3
 
 Parse.Cloud.define("newUser", function(request, response) {
 	var thisUser = request.user;
+	var tzoffset = request.params.tzoffset;
 	var locations = [];
 	console.log("newUser photo count=" + request.params.roll.length);
 	// find all the locations in the camera roll, count the photos at each location, find length of time at location
@@ -29,7 +31,7 @@ Parse.Cloud.define("newUser", function(request, response) {
 			album.set("comments", 0);
 			album.set("createdBy", thisUser);
 			album.set("persistentID", albumContents[0].id);
-			var albumTitle = makeAlbumTitle(albumContents);
+			var albumTitle = makeAlbumTitle(albumContents tzoffset);
 			album.set("title", albumTitle);
 			album.setACL(worldACL);
 			(function(reverseLocation) {
@@ -108,18 +110,19 @@ function reverseGeocode(location, callback) {
 	geocoder.reverse(location.latitude, location.longitude).then(function(result) { callback(result) });
 }
 
-function makeAlbumTitle(album) {
+function makeAlbumTitle(album, tzoffset) {
 	// album is already sorted earliest to latest
 	var location = album[0].reverseLocation;
 	if (location === undefined)
 		location = "my life";
 	try {
-		var timeEnd = new Date(album[0].date.iso);
-		var timeStart = new Date(album[album.length -1].date.iso);
+		var millisecondOffset = tzoffset * 1000;
+		var timeEnd = new Date(album[0].date.iso) + millisecondOffset;
+		var timeStart = new Date(album[album.length -1].date.iso) + millisecondOffset;
 		var hourDiff = timeEnd - timeStart;
 		var secDiff = hourDiff / 1000; //in s
-		var minDiff = hourDiff / 60 / 1000; //in minutes
-		var hDiff = hourDiff / 3600 / 1000; //in hours
+		var minDiff = secDiff / 60 
+		var hDiff = minDiff / 60
 		var day = timeStart.getDay();
 		var month = timeStart.getMonth();
 		var year = timeStart.getYear();
@@ -191,9 +194,11 @@ function getAlbumSubset(roll) {
 		var count = MAX_ALBUMS - 2;
 		while (albums.length > 0 && count > 0) {
 			var choice = Math.floor((Math.random() * albums.length));
-			subset.push(albums[choice]);
-			albums.splice(choice, 1);
-			count--;
+			if (albums[choice].length >= ALBUM_SIZE_THRESHOLD) {
+				subset.push(albums[choice]);
+				albums.splice(choice, 1);
+				count--;
+			}
 		}
 		console.log(JSON.stringify(subset));
 		return subset;
