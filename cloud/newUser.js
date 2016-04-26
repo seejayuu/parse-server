@@ -1,7 +1,7 @@
 var _ = require("underscore");
 
 var MAX_ALBUMS = 8
-var MAX_PHOTOS_PER_ALBUM = 2
+var MAX_PHOTOS_PER_ALBUM = 50
 var ALBUM_SIZE_THRESHOLD = 3
 
 Parse.Cloud.define("newUser", function(request, response) {
