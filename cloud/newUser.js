@@ -189,7 +189,7 @@ function getAlbumSubset(roll) {
 			albums.splice(choice, 1);
 			count--;
 		}
-		console.log("**************** subset count=" + subset.length);
+		console.log(JSON.stringify(subset));
 		return subset;
 	}
 	catch (e) {
