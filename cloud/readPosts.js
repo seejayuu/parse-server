@@ -81,6 +81,9 @@ Parse.Cloud.define("readPosts", function(request, response) {
 		}
 		if (finalResults.length > MAX_RESULTS)
 			finalResults.length = MAX_RESULTS;
+			
+		console.log(JSON.stringify(finalResults[0]));
+			
 		response.success(finalResults);
 	});
 });
