@@ -13,6 +13,10 @@ var recognizer1 = require('./recognizer/clarifai/main.js');
 var recognizer2 = require('./recognizer/moodstocks/main.js');
 var recognizer3 = require('./recognizer/watson/main.js');
 
+var badTags = [
+	"no person", "business"
+]
+
 var recognizers = [
 	{ name: "Clarifai", module: recognizer1 },
 	{ name: "Moodstocks", module: recognizer2 },
@@ -32,7 +36,7 @@ Parse.Cloud.afterSave("Post", function(request) {
             var relation = request.object.relation("tags");
             console.log("Tags from " + recognizers[index].name + ": " + JSON.stringify(tags[0]));
             var count = 0;
-            var filteredTags = _.without(tags[0].classes, "no person", "business");
+            var filteredTags = _.without(tags[0].classes, badTags);
             var maxtags = Math.min(MAX_FROM_ONE_RECOGNIZER, filteredTags.length);
             for (j = 0; j < maxtags; j++) {
               // make sure each tag is saved if it doesn't already exist
@@ -71,9 +75,10 @@ Parse.Cloud.define("generateTags", function(request, response) {
 					  recognizers[index].module.getTags(result.get("itemImage").url(), request.params.photoId, function(tags) {
 						// only use the top tags
 						console.log("Tags from " + recognizers[index].name + ": " + JSON.stringify(tags[0]));
-						var maxtags = Math.min(MAX_FROM_ONE_RECOGNIZER, tags[0].classes.length);
+						var filteredTags = _.without(tags[0].classes, badTags);
+						var maxtags = Math.min(MAX_FROM_ONE_RECOGNIZER, filteredTags.length);
 						for (j = 0; j < maxtags; j++) {
-							tagResults.push(tags[0].classes[j]);
+							tagResults.push(filteredTags[j]);
 						}
 						if (++resultCount >= recognizers.length) {
 							response.success(tagResults);
