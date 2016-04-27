@@ -13,10 +13,6 @@ var recognizer1 = require('./recognizer/clarifai/main.js');
 var recognizer2 = require('./recognizer/moodstocks/main.js');
 var recognizer3 = require('./recognizer/watson/main.js');
 
-var badTags = [
-	"no person", "business"
-]
-
 var recognizers = [
 	{ name: "Clarifai", module: recognizer1 },
 	{ name: "Moodstocks", module: recognizer2 },
@@ -36,7 +32,7 @@ Parse.Cloud.afterSave("Post", function(request) {
             var relation = request.object.relation("tags");
             console.log("Tags from " + recognizers[index].name + ": " + JSON.stringify(tags[0]));
             var count = 0;
-            var filteredTags = _.without(tags[0].classes, badTags);
+            var filteredTags = _.without(tags[0].classes, "no person", "business");
             var maxtags = Math.min(MAX_FROM_ONE_RECOGNIZER, filteredTags.length);
             for (j = 0; j < maxtags; j++) {
               // make sure each tag is saved if it doesn't already exist
