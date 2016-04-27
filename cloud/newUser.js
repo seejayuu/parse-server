@@ -22,9 +22,6 @@ Parse.Cloud.define("newUser", function(request, response) {
 			console.log("Album: " + albumContents[0].reverseLocation + " " + albumContents.length + " photos");
 			// sort by date earliest to latest
 			albumContents = _.sortBy(albumContents.reverse(), function(a) { a.date.iso });
-			
-			console.log("******AlbumContents sorted: " + JSON.stringify(albumContents));		
-			
 			var Album = Parse.Object.extend("Album");
 			var album = new Album();
 			var worldACL = new Parse.ACL();
@@ -40,13 +37,11 @@ Parse.Cloud.define("newUser", function(request, response) {
 			(function(reverseLocation) {
 				album.save(null, {
 					success: function(album) {
-					console.log("******* album saved, length = " + albumContents.length);
 						if (albumContents.length > MAX_PHOTOS_PER_ALBUM)
 							albumContents.length = MAX_PHOTOS_PER_ALBUM;
 						_.each(albumContents, function(albumPost) {
 							try {
 								console.log(JSON.stringify(albumPost));
-								console.log("saving photo: " + albumPost.id + " album: " + reverseLocation);
 								var Post = Parse.Object.extend("Post");
 								var post = new Post();
 								post.set("type", "roll");
@@ -117,7 +112,7 @@ function makeAlbumTitle(album, tzoffset) {
 	// album is already sorted earliest to latest
 	var location = album[0].reverseLocation;
 	if (location === undefined)
-		location = "my life";
+		location = "My life";
 	try {
 		var millisecondOffset = tzoffset * 1000;
 		var timeEnd = new Date(album[0].date.iso)
@@ -132,10 +127,6 @@ function makeAlbumTitle(album, tzoffset) {
 		var month = timeStart.getMonth();
 		var year = timeStart.getYear();
 		var startHour = timeStart.getHours();
-		
-		console.log("******makeAlbumTitle: location=" + location + " start=" + timeStart + " end=" + timeEnd + " hDiff=" + hDiff + " startHour=" + startHour); 
-		
-		
 		// holidays, thanksgiving, New Years, christmas July 4th etc, birthday
 		var holidays = [
 			{ name: "July 4th", start: "7/4", duration: 1 },

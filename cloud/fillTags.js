@@ -2,15 +2,20 @@
  * uses various 3rd party services to generate tags for images
  */
  
-var user = require('./util/user.js');
- 
 var MAX_FROM_ONE_RECOGNIZER = 6
+ 
+var user = require('./util/user.js');
+var _ = require("underscore");
  
 var user = require('./util/user.js');
 var tag = require('./util/tag.js');
 var recognizer1 = require('./recognizer/clarifai/main.js');
 var recognizer2 = require('./recognizer/moodstocks/main.js');
 var recognizer3 = require('./recognizer/watson/main.js');
+
+var badTags = [
+	"no person", "business"
+]
 
 var recognizers = [
 	{ name: "Clarifai", module: recognizer1 },
@@ -31,10 +36,12 @@ Parse.Cloud.afterSave("Post", function(request) {
             var relation = request.object.relation("tags");
             console.log("Tags from " + recognizers[index].name + ": " + JSON.stringify(tags[0]));
             var count = 0;
-            var maxtags = Math.min(MAX_FROM_ONE_RECOGNIZER, tags[0].classes.length);
+            var filteredTags = _.without(tags[0].classes, badTags);
+            var maxtags = Math.min(MAX_FROM_ONE_RECOGNIZER, filteredTags.length);
             for (j = 0; j < maxtags; j++) {
               // make sure each tag is saved if it doesn't already exist
-              tag.tagRead(tags[0].classes[j], function(tagName, tagInfo) {
+              if
+              tag.tagRead(filteredTags[j], function(tagName, tagInfo) {
                 if (tagInfo == null || tagInfo.length == 0) {
                   tag.tagCreate(tagName, recognizers[index].name, request.user, function(tagInfo) {
                     relation.add(tagInfo);
