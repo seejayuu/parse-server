@@ -40,7 +40,7 @@ Parse.Cloud.afterSave("Post", function(request) {
             var maxtags = Math.min(MAX_FROM_ONE_RECOGNIZER, filteredTags.length);
             for (j = 0; j < maxtags; j++) {
               // make sure each tag is saved if it doesn't already exist
-              if
+              
               tag.tagRead(filteredTags[j], function(tagName, tagInfo) {
                 if (tagInfo == null || tagInfo.length == 0) {
                   tag.tagCreate(tagName, recognizers[index].name, request.user, function(tagInfo) {
