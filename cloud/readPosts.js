@@ -74,7 +74,7 @@ Parse.Cloud.define("readPosts", function(request, response) {
 		var finalResults = [];
 		try {
 			_.each(results, function accum(r) { finalResults = finalResults.concat(r) });
-			finalResults = _.sortBy(_.uniq(finalResults, function (a) { return a.id }), function(a) { return a.get("postedAt") || a.get("createdAt") }).reverse();
+			finalResults = _.sortBy(_.uniq(finalResults, function (a) { return a.id }), function(a) { return a.get("fromRollAt") || a.get("createdAt") }).reverse();
 		}
 		catch (e) {
 			console.log(e);
