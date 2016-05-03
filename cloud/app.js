@@ -282,22 +282,15 @@ app.get('/admin/fix_counts', function(request, response) {
 });
 
 // scans all rows in a class and calls back for each one that was created by a deleted user
-function findNoCreatedBy(className, callback) {
+function scan(className, callback) {
+	var str = "Class: " + className + " ";
 	var classToScan = Parse.Object.extend(className);
 	var query = new Parse.Query(classToScan);
 	query.include("createdBy");
-	return query.each(function(result) {
-		// if (result.createdBy != nil)
-			callback(result);
-	});
-}
-
-function scan(className, accumFunc) {
-	var str = "Class: " + className + "<br>===================<br>";
-	findNoCreatedBy(className, function(result) {
-		str += result.id + "<br>";		
-	}).then(accumFunc(str));
-	
+	query.each(function(result) {
+		if (result.createdBy != nil)
+			str += result.id + " *** ";		
+	}).then(function() {callback(str)});
 }
 
 app.get('/admin/list_orphans', function(request, response) {
