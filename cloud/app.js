@@ -288,6 +288,7 @@ function scan(className, callback) {
 	var query = new Parse.Query(classToScan);
 	query.include("createdBy");
 	query.each(function(result) {
+		console.log(result.id + " ");
 		if (result.createdBy != nil)
 			str += result.id + " *** ";		
 	}).then(function() {callback(str)});
