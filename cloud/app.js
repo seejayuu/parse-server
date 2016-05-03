@@ -291,7 +291,7 @@ function scan(className, callback) {
 		console.log(result.id + " ");
 		if (result.createdBy != nil)
 			str += result.id + " *** ";		
-	}).then(function() {callback(str)});
+	}).then(function() {callback(str)}).catch(function() { callback("***ERROR***")});
 }
 
 app.get('/admin/list_orphans', function(request, response) {
