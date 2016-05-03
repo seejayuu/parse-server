@@ -287,7 +287,7 @@ function findNoCreatedBy(className, callback) {
 	var query = new Parse.Query(classToScan);
 	query.include("createdBy");
 	return query.each(function(result) {
-		if result.createdBy != nil
+		if (result.createdBy != nil)
 			callback(result);
 	});
 }
