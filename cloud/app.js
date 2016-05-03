@@ -278,6 +278,48 @@ app.get('/admin/post_write', function(request, response) {
 
 app.get('/admin/fix_counts', function(request, response) {
 	Parse.Cloud.useMasterKey()
+	response.render('admindone', { msg: "Not implemented" });
+});
+
+// scans all rows in a class and calls back for each one that was created by a deleted user
+function findNoCreatedBy(className, callback) {
+	var classToScan = Parse.Object.extend(className);
+	var query = new Parse.Query(classToScan);
+	query.include("createdBy");
+	return query.each(function(result) {
+		if result.createdBy != nil
+			callback(result);
+	});
+}
+
+function scan(className, accumFunc) {
+	var str = "Class: " + className + "\n===================\n";
+	findNoCreatedBy(className, function(result) {
+		str += result.id + "\n";		
+	}).then(accumFunc(str));
+	
+}
+
+app.get('/admin/list_orphans', function(request, response) {
+	var rowList = "";
+	var count = 0;
+	function accum(str) {
+		rowList += str
+		if (++count >= 7)
+			response.render('admindone', { msg: rowList });
+	}
+	Parse.Cloud.useMasterKey();
+	scan("Post", accum);
+	scan("Follow", accum);
+	scan("Album", accum);
+	scan("Like", accum);
+	scan("Comment", accum);
+	scan("Notification", accum);
+	scan("Log", accum);
+});
+
+app.get('/admin/fix_orphans', function(request, response) {
+	Parse.Cloud.useMasterKey();
 	response.render('admindone', { msg: "" });
 });
 
