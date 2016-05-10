@@ -114,7 +114,7 @@ app.get('/install/:userid/:type/:contentid', function(request, response) {
 	  if (user != null) {
       userObj = user
       userName = user.get("name")
-      if (userName == "")
+      if (typeof userName == "undefined")
         userName = user.get("username")
       try {
         userPhoto = user.get("profilePhoto").url()
