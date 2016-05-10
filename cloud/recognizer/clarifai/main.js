@@ -7,6 +7,8 @@ var apiURL = "api.clarifai.com"
 var tagPath = "/v1/tag/";
 var requestTokenPath = "/v1/token";
 
+var request = require('request');
+
 function getTags(imageURL, imageID, completion) {
 	var results = []
 	tagURL(imageURL , imageID, function(error, res) {
@@ -42,29 +44,22 @@ function getTags(imageURL, imageID, completion) {
 
 function tagURL(imageURL, imageID, completion) {
 	// get the session token
-	var obj = { client_id: clientID, client_secret: clientSecret, grant_type: "client_credentials"}
-	Parse.Cloud.httpRequest({
-		url: "https://" + apiURL + requestTokenPath,
-		method: 'POST',
-		body: Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&'),
-		success: function(response) {
-			// upload the image and read back the tags
-			Parse.Cloud.httpRequest({
-				url: "https://" + apiURL + tagPath + '?access_token=' + response.data.access_token + '&url=' + imageURL,
-				method: 'GET',
-				success: function(response) {
-					completion(null, response.data)
-				},
-				error: function(error) {
-					console.error(error)
-					completion(error)
-				}
-			});
+	request.post("https://" + apiURL + requestTokenPath,
+		{
+			form: { client_id: clientID, client_secret: clientSecret, grant_type: "client_credentials"}
 		},
-		error: function(error) {
-			console.error(error)
+		function(error, response, body) {
+			// upload the image and read back the tags
+			request("https://" + apiURL + tagPath + '?access_token=' + JSON.parse(body).access_token + '&url=' + imageURL,
+				function(error, response, body) {
+					if (error)
+						completion(error);
+					else
+						completion(null, JSON.parse(body))
+				}
+			);
 		}
-	});
+	);
 }
 
 exports.getTags = getTags

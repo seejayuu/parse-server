@@ -10,7 +10,8 @@ var express = require('express');
 //var app = express();		// now runs off the parse-server express instance
 var http = require('http');
 var mail = require('./Mailgun.js');
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
+var request = require('request');
 
 mail.initialize('sandbox4ba3cd71927a419db74f6a84e97973f6.mailgun.org', 'key-f7f17e392715c4328b9274a4557d08a5');
 
@@ -26,7 +27,32 @@ app.get('/', function(request, response) {
 	response.render('home', { id: "" });
 });
 
-//app.use(express.static('public'));
+app.use(express.static('public'));
+
+//////////////////////////////////////
+// Pingdom service monitoring
+//////////////////////////////////////
+
+app.get('/backendcheck', function(req, response) {
+	request({
+		url: "http://poppo.herokuapp.com/parse",
+		headers: {
+			"X-Parse-Application-Id": 'r0KegEx2R4IO1Bk8ajoS'
+		},
+		
+	}, function (error, resp, data) {
+		var status;
+		var startTime = new Date();;
+		if (error) {
+			status = error;
+		}
+		else {
+			status = "OK"
+			console.log("Back end check: " + JSON.stringify(data));
+		}
+		response.render('backendcheck', {status: status, responseTime: new Date() - startTime});
+	});
+});
 
 //////////////////////////////////////
 // password reset
@@ -252,6 +278,42 @@ app.get('/admin/post_write', function(request, response) {
 
 app.get('/admin/fix_counts', function(request, response) {
 	Parse.Cloud.useMasterKey()
+	response.render('admindone', { msg: "Not implemented" });
+});
+
+// scans all rows in a class and calls back for each one that was created by a deleted user
+function scan(className, callback) {
+	var str = "Class: " + className + " ";
+	var classToScan = Parse.Object.extend(className);
+	var query = new Parse.Query(classToScan);
+	query.include("createdBy");
+	query.each(function(result) {
+		console.log(result.id + " ");
+		if (result.createdBy != nil)
+			str += result.id + " *** ";		
+	}).then(function() {callback(str)}).catch(function() { callback("***ERROR***")});
+}
+
+app.get('/admin/list_orphans', function(request, response) {
+	var rowList = "";
+	var count = 0;
+	function accum(str) {
+		rowList += str
+		if (++count >= 7)
+			response.render('admindone', { msg: rowList });
+	}
+	Parse.Cloud.useMasterKey();
+	scan("Post", accum);
+	scan("Follow", accum);
+	scan("Album", accum);
+	scan("Like", accum);
+	scan("Comment", accum);
+	scan("Notification", accum);
+	scan("Log", accum);
+});
+
+app.get('/admin/fix_orphans', function(request, response) {
+	Parse.Cloud.useMasterKey();
 	response.render('admindone', { msg: "" });
 });
 

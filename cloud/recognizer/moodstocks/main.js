@@ -2,19 +2,19 @@
 
 var api_key = "rhyn4dqidjhuoebkaxzu"
 var api_secret = "CN9RoCqSn92TAkLg"
-var apiURL = "api.moodstocks.com/v2"
+var apiURL = "api.moodstocks.com"
 
 //curl --digest -u YourApiKey:YourApiSecret "http://api.moodstocks.com/v2/search" --form image_url="http://www.example.com/bar.jpg"
 
 
-var searchPath = "/search";
+var searchPath = "/v2/search";
 
 function getTags(imageURL, imageID, completion) {
 	var results = []
 	tagURL(imageURL , function(error, res) {
 		if (error == null) {
 		  if (res.found) {
-		    completion([ { classes: [res.id] } ])
+		    completion([ { classes: [res.id.replace("-","")] } ])
 		  }
 		  else
 		    completion([{ classes: [] }])
@@ -24,24 +24,31 @@ function getTags(imageURL, imageID, completion) {
 	});
 }
 
-var digest = require('../../util/http-digest-client')(api_key, api_secret);
+var request = require('request');
 
 function tagURL(imageURL, completion) {
 	var obj = { image_url: imageURL };
-  digest.request({
+  	request.post({
+  	auth: {
+  		user: api_key,
+  		pass: api_secret,
+  		sendImmediately: false
+  	},
     url: "http://" + apiURL + searchPath,
     method: 'POST',
-    digesturi: "/v2/search",
+//    json: true,
+//    body: obj
     body: Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&'),
-    success: function(response) {
-      console.log("Moodstocks API success: " + JSON.stringify(response.data));
-      completion(null, response.data);
     },
-    error: function(error) {
-      console.error("Moodstocks error: " + JSON.stringify(error));
-      completion(error);
-    }
-  });
+	function(error, response, body) {
+		if (!error) {
+		  console.log("Moodstocks API success: " + JSON.stringify(body));
+		  completion(null, JSON.parse(body));
+		}
+		else
+			completion(err);
+	}
+  );
 }
 
 exports.getTags = getTags

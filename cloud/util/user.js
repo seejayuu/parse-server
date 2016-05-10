@@ -16,4 +16,5 @@ function getObject(className, userID, completionBlock) {
 	});
 }
 
-exports.getUser = getUser
+exports.getUser = getUser;
+exports.getObject = getObject;

@@ -1,8 +1,6 @@
 var client = require('./Mailgun.js');
 client.initialize('sandbox4ba3cd71927a419db74f6a84e97973f6.mailgun.org', 'key-f7f17e392715c4328b9274a4557d08a5');
 
-console.log("**********************" + __dirname);
-
 Parse.Cloud.define("sendEmailToUser", function(request, response) {
   client.sendEmail({
     to: request.params.to,
