@@ -124,7 +124,7 @@ app.get('/install/:userid/:type/:contentid', function(request, response) {
 	  var title = content == null ? "This item has been deleted" : (content == "" ? "" : content.get("title"))
 	  if (imageField == null)
 	    title = ""
-	  if (typeof title == 'undefined')
+	  if (typeof title == 'undefined') 
 	  	title = ""
 	  var imageurl = content == null ? "/assets/empty-content.png" : content.get(imageField).url()
 		response.render('install', { user: userName, userimageurl: userPhoto, what: request.params.type, imageurl: imageurl, title: title, launchparams: request.params.userid + "/" + request.params.type + "/" + request.params.contentid });
