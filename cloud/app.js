@@ -289,7 +289,7 @@ function scan(className, callback) {
 	query.include("createdBy");
 	query.each(function(result) {
 		console.log(result.id + " ");
-		if (result.createdBy != nil)
+		if (typeof result.createdBy != 'undefined')
 			str += result.id + " *** ";		
 	}).then(function() {callback(str)}).catch(function() { callback("***ERROR***")});
 }
