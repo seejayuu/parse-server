@@ -287,10 +287,13 @@ function scan(className, callback) {
 	var classToScan = Parse.Object.extend(className);
 	var query = new Parse.Query(classToScan);
 	query.include("createdBy");
+	var count = 0;
 	query.each(function(result) {
-		if (typeof result.get("createdBy") == 'undefined')
-			str += result.id + "<br>";		
-	}).then(function() {callback(str)}).catch(function() { callback("***ERROR***<br>")});
+		if (typeof result.get("createdBy") == 'undefined') {
+		  count++
+			str += result.id + "<br>";
+		}
+	}).then(function() {callback(str + "count=" + count)}).catch(function() { callback("***ERROR***<br>")});
 }
 
 app.get('/admin/list_orphans', function(request, response) {
