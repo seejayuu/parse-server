@@ -288,8 +288,8 @@ function scan(className, callback) {
 	var query = new Parse.Query(classToScan);
 	query.include("createdBy");
 	query.each(function(result) {
-		console.log(result.id + " ");
-		if (typeof result.createdBy != 'undefined')
+		console.log(JSON.stringify(result));
+		if (typeof result.createdBy == 'undefined')
 			str += result.id + " *** ";		
 	}).then(function() {callback(str)}).catch(function() { callback("***ERROR***")});
 }
@@ -299,17 +299,17 @@ app.get('/admin/list_orphans', function(request, response) {
 	var count = 0;
 	function accum(str) {
 		rowList += str
-		if (++count >= 7)
+//		if (++count >= 7)
 			response.render('admindone', { msg: rowList });
 	}
 	Parse.Cloud.useMasterKey();
-	scan("Post", accum);
-	scan("Follow", accum);
+//	scan("Post", accum);
+//	scan("Follow", accum);
 	scan("Album", accum);
-	scan("Like", accum);
-	scan("Comment", accum);
-	scan("Notification", accum);
-	scan("Log", accum);
+//	scan("Like", accum);
+//	scan("Comment", accum);
+//	scan("Notification", accum);
+//	scan("Log", accum);
 });
 
 app.get('/admin/fix_orphans', function(request, response) {
