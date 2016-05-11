@@ -283,15 +283,14 @@ app.get('/admin/fix_counts', function(request, response) {
 
 // scans all rows in a class and calls back for each one that was created by a deleted user
 function scan(className, callback) {
-	var str = "Class: " + className + " ";
+	var str = "Class: " + className + "<br>";
 	var classToScan = Parse.Object.extend(className);
 	var query = new Parse.Query(classToScan);
 	query.include("createdBy");
 	query.each(function(result) {
-		console.log(JSON.stringify(result));
 		if (typeof result.get("createdBy") == 'undefined')
-			str += result.id + " *** ";		
-	}).then(function() {callback(str)}).catch(function() { callback("***ERROR***")});
+			str += result.id + "<br>";		
+	}).then(function() {callback(str)}).catch(function() { callback("***ERROR***<br>")});
 }
 
 app.get('/admin/list_orphans', function(request, response) {
@@ -299,17 +298,17 @@ app.get('/admin/list_orphans', function(request, response) {
 	var count = 0;
 	function accum(str) {
 		rowList += str
-//		if (++count >= 7)
+		if (++count >= 7)
 			response.render('admindone', { msg: rowList });
 	}
 	Parse.Cloud.useMasterKey();
-//	scan("Post", accum);
-//	scan("Follow", accum);
+	scan("Post", accum);
+	scan("Follow", accum);
 	scan("Album", accum);
-//	scan("Like", accum);
-//	scan("Comment", accum);
-//	scan("Notification", accum);
-//	scan("Log", accum);
+	scan("Like", accum);
+	scan("Comment", accum);
+	scan("Notification", accum);
+	scan("Log", accum);
 });
 
 app.get('/admin/fix_orphans', function(request, response) {
