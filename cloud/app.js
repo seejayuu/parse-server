@@ -283,7 +283,7 @@ app.get('/admin/fix_counts', function(request, response) {
 
 // scans all rows in a class and calls back for each one that was created by a deleted user
 function scan(className, callback) {
-	var str = """<br>Class: " + className + "<br>";
+	var str = "";
 	var classToScan = Parse.Object.extend(className);
 	var query = new Parse.Query(classToScan);
 	query.include("createdBy");
