@@ -326,7 +326,7 @@ function scanOrphans(deleteFlag) {
 	scan("Comment", "createdBy", deleteFlag, accum);
 	scan("Notification", "from", deleteFlag, accum);
 	scan("Log", "createdBy", deleteFlag, accum);
-});
+}
 
 app.get('/admin/fix_orphans', function(request, response) {
   scanOrphans(true);	
