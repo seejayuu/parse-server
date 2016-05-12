@@ -294,9 +294,7 @@ function scan(className, userFieldName, deleteFlag, callback) {
 		  count++
 			str += result.id + "<br>";
 			if (deleteFlag) {
-          console.log("+++++++++++++++++++++++++++++++");
         user.getObject(className, result.id, function(obj) {
-          console.log("*****************************");
           obj.destroy({
             success: function() {
               console.log("***deleted: " + result.id);
@@ -334,7 +332,7 @@ function scanOrphans(response, deleteFlag) {
 }
 
 app.get('/admin/fix_orphans', function(request, response) {
-  scanOrphans(true);	
+  scanOrphans(response, true);	
 });
 
 //////////////////////////////////////
