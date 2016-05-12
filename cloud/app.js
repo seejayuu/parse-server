@@ -294,12 +294,12 @@ function scan(className, userFieldName, deleteFlag, callback) {
 			str += result.id + "<br>";
 			if (deleteFlag) {
         Utils.getObject(className, result.id, function(obj) {
-          obj.destroy(
+          obj.destroy({
             success: function() {
             },
             error: function() {
             }
-          );
+          });
         });
 			}
 		}
