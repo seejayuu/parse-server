@@ -293,7 +293,7 @@ function scan(className, userFieldName, deleteFlag, callback) {
 		  count++
 			str += result.id + "<br>";
 			if (deleteFlag) {
-        Utils.getObject(className, result.id function(obj) {
+        Utils.getObject(className, result.id, function(obj) {
           obj.destroy(
             success: function() {
             },
