@@ -283,7 +283,7 @@ app.get('/admin/fix_counts', function(request, response) {
 
 // scans all rows in a class and calls back for each one that was created by a deleted user
 function scan(className, callback) {
-	var str = "<br>Class: " + className + "<br>";
+	var str = """<br>Class: " + className + "<br>";
 	var classToScan = Parse.Object.extend(className);
 	var query = new Parse.Query(classToScan);
 	query.include("createdBy");
@@ -293,7 +293,7 @@ function scan(className, callback) {
 		  count++
 			str += result.id + "<br>";
 		}
-	}).then(function() {callback(str + "count=" + count)}).catch(function() { callback("***ERROR***<br>")});
+	}).then(function() {callback("Class: " + className + "(" + count + ")<br>" + str + "<br>")}).catch(function() { callback("***ERROR***<br>")});
 }
 
 app.get('/admin/list_orphans', function(request, response) {
