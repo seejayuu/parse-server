@@ -308,7 +308,7 @@ function scan(className, userFieldName, deleteFlag, callback) {
 
 app.get('/admin/list_orphans', function(request, response) {
   scanOrphans(false);
-}
+});
 
 function scanOrphans(deleteFlag) {
 	var rowList = "";
