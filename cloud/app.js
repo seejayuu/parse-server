@@ -282,14 +282,14 @@ app.get('/admin/fix_counts', function(request, response) {
 });
 
 // scans all rows in a class and calls back for each one that was created by a deleted user
-function scan(className, callback) {
+function scan(className, userFieldName, callback) {
 	var str = "";
 	var classToScan = Parse.Object.extend(className);
 	var query = new Parse.Query(classToScan);
-	query.include("createdBy");
+	query.include(userFieldName);
 	var count = 0;
 	query.each(function(result) {
-		if (typeof result.get("createdBy") == 'undefined') {
+		if (typeof result.get(userFieldName) == 'undefined') {
 		  count++
 			str += result.id + "<br>";
 		}
@@ -305,13 +305,13 @@ app.get('/admin/list_orphans', function(request, response) {
 			response.render('admindone', { msg: rowList });
 	}
 	Parse.Cloud.useMasterKey();
-	scan("Post", accum);
-	scan("Follow", accum);
-	scan("Album", accum);
-	scan("Like", accum);
-	scan("Comment", accum);
-	scan("Notification", accum);
-	scan("Log", accum);
+	scan("Post", "createdBy", accum);
+	scan("Follow", "from", accum);
+	scan("Album", "createdBy", accum);
+	scan("Like", "createdBy", accum);
+	scan("Comment", "createdBy", accum);
+	scan("Notification", "from", accum);
+	scan("Log", "createdBy", accum);
 });
 
 app.get('/admin/fix_orphans', function(request, response) {
