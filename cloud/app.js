@@ -295,6 +295,7 @@ function scan(className, userFieldName, deleteFlag, callback) {
 			str += result.id + "<br>";
 			if (deleteFlag) {
         user.getObject(className, result.id, function(obj) {
+          console.log("*****************************");
           obj.destroy({
             success: function() {
               console.log("***deleted: " + result.id);
