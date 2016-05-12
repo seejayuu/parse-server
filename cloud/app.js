@@ -307,10 +307,10 @@ function scan(className, userFieldName, deleteFlag, callback) {
 }
 
 app.get('/admin/list_orphans', function(request, response) {
-  scanOrphans(false);
+  scanOrphans(response, false);
 });
 
-function scanOrphans(deleteFlag) {
+function scanOrphans(response, deleteFlag) {
 	var rowList = "";
 	var count = 0;
 	function accum(str) {
