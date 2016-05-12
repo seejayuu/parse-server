@@ -12,6 +12,7 @@ var http = require('http');
 var mail = require('./Mailgun.js');
 var bodyParser = require('body-parser');
 var request = require('request');
+var user = require('./util/user.js');
 
 mail.initialize('sandbox4ba3cd71927a419db74f6a84e97973f6.mailgun.org', 'key-f7f17e392715c4328b9274a4557d08a5');
 
@@ -293,7 +294,7 @@ function scan(className, userFieldName, deleteFlag, callback) {
 		  count++
 			str += result.id + "<br>";
 			if (deleteFlag) {
-        Utils.getObject(className, result.id, function(obj) {
+        user.getObject(className, result.id, function(obj) {
           obj.destroy({
             success: function() {
             },
