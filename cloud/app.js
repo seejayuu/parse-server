@@ -282,7 +282,7 @@ app.get('/admin/fix_counts', function(request, response) {
 });
 
 // scans all rows in a class and calls back for each one that was created by a deleted user
-function scan(className, userFieldName, callback) {
+function scan(className, userFieldName, deleteFlag, callback) {
 	var str = "";
 	var classToScan = Parse.Object.extend(className);
 	var query = new Parse.Query(classToScan);
@@ -292,11 +292,25 @@ function scan(className, userFieldName, callback) {
 		if (typeof result.get(userFieldName) == 'undefined') {
 		  count++
 			str += result.id + "<br>";
+			if (deleteFlag) {
+        Utils.getObject(className, result.id function(obj) {
+          obj.destroy(
+            success: function() {
+            },
+            error: function() {
+            }
+          );
+        });
+			}
 		}
 	}).then(function() {callback("Class: " + className + "(" + count + ")<br>" + str + "<br>")}).catch(function() { callback("***ERROR***<br>")});
 }
 
 app.get('/admin/list_orphans', function(request, response) {
+  scanOrphans(false);
+}
+
+function scanOrphans(deleteFlag) {
 	var rowList = "";
 	var count = 0;
 	function accum(str) {
@@ -305,18 +319,17 @@ app.get('/admin/list_orphans', function(request, response) {
 			response.render('admindone', { msg: rowList });
 	}
 	Parse.Cloud.useMasterKey();
-	scan("Post", "createdBy", accum);
-	scan("Follow", "from", accum);
-	scan("Album", "createdBy", accum);
-	scan("Like", "createdBy", accum);
-	scan("Comment", "createdBy", accum);
-	scan("Notification", "from", accum);
-	scan("Log", "createdBy", accum);
+	scan("Post", "createdBy", deleteFlag, accum);
+	scan("Follow", "from", deleteFlag, accum);
+	scan("Album", "createdBy", deleteFlag, accum);
+	scan("Like", "createdBy", deleteFlag, accum);
+	scan("Comment", "createdBy", deleteFlag, accum);
+	scan("Notification", "from", deleteFlag, accum);
+	scan("Log", "createdBy", deleteFlag, accum);
 });
 
 app.get('/admin/fix_orphans', function(request, response) {
-	Parse.Cloud.useMasterKey();
-	response.render('admindone', { msg: "" });
+  scanOrphans(true);	
 });
 
 //////////////////////////////////////
