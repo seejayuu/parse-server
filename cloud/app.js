@@ -297,10 +297,8 @@ function scan(className, userFieldName, deleteFlag, callback) {
         user.getObject(className, result.id, function(obj) {
           obj.destroy({
             success: function() {
-              console.log("***deleted: " + result.id);
             },
             error: function() {
-              console.log("***error***");
             }
           });
         });
