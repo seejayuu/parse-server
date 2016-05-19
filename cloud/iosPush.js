@@ -9,7 +9,9 @@ Parse.Cloud.define("getSkin", function(request, response) {
 	  query.include("skin").include("user").include("user.skin");
 	  query.find({
 		success: function(results) {
+			console.log("******** getSkin");
 			if (results.length > 0) {
+				console.log("******** getSkin results");
 				var result = results[0];
 				var installationSkin = result.get("skin");
 				if (!installationSkin)
@@ -17,10 +19,14 @@ Parse.Cloud.define("getSkin", function(request, response) {
 				console.log(JSON.stringify(installationSkin));
 				response.success(installationSkin);
 			}
-			else
-				response.error("No skin found");
+			else {
+						console.log("******** getSkin error");
+
+			}
 		},
 		error: function(error) {
+						console.log("******** getSkin ERROR");
+
 			console.log(error);
 			response.error(error);
 		}
@@ -28,6 +34,8 @@ Parse.Cloud.define("getSkin", function(request, response) {
   }
   catch (e) {
 	console.error(e);
+				console.log("******** getSkin CATCH");
+
 	response.error(e);
   }
 });
