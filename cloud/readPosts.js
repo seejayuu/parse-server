@@ -82,6 +82,10 @@ Parse.Cloud.define("readPosts", function(request, response) {
 			var finalResults = [];
 			try {
 				_.each(results, function accum(r) { finalResults = finalResults.concat(r) });
+				
+				
+				console.log("********** " + JSON.stringify(blockList));
+				
 				finalResults = _.filter(finalResults, function(post) { return _.where(blockList, {toPost: post }).length == 0 } );
 				finalResults = _.sortBy(_.uniq(finalResults, function (a) { return a.id }), function(a) { return a.get("fromRollAt") || a.get("createdAt") }).reverse();
 			}
