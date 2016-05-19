@@ -86,7 +86,7 @@ Parse.Cloud.define("readPosts", function(request, response) {
 				
 				console.log("********** " + JSON.stringify(blockList));
 				
-				finalResults = _.filter(finalResults, function(post) { return _.filter(blockList, function (i) { return i.toPost.id == post.toPost.id }).length == 0 } );
+				finalResults = _.filter(finalResults, function(post) { return _.filter(blockList, function (i) { return typeof(i.toPost.id) != 'undefined' && i.toPost.id == post.toPost.id }).length == 0 } );
 				finalResults = _.sortBy(_.uniq(finalResults, function (a) { return a.id }), function(a) { return a.get("fromRollAt") || a.get("createdAt") }).reverse();
 			}
 			catch (e) {
