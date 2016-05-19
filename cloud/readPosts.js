@@ -54,6 +54,13 @@ Parse.Cloud.define("readPosts", function(request, response) {
 		});
 	}
 	
+	// get the posts blocked by this user
+	function queryBlocks() {
+		var blockQuery = getQuery("Block");
+		blockQuery.equalTo("fromUser", user).exists("toPost").include("toPost");
+		return blockQuery.find();
+	}
+	
 	// get the albums/groups that the current user has posted
 	function queryPost3() {
 		var query = getQuery("Follow");
@@ -70,17 +77,20 @@ Parse.Cloud.define("readPosts", function(request, response) {
 		// get the albums/groups that the current user has posted
 		promises.push(queryPost3());
 	}
-	Parse.Promise.when(promises).then(function(results) {
-		var finalResults = [];
-		try {
-			_.each(results, function accum(r) { finalResults = finalResults.concat(r) });
-			finalResults = _.sortBy(_.uniq(finalResults, function (a) { return a.id }), function(a) { return a.get("fromRollAt") || a.get("createdAt") }).reverse();
-		}
-		catch (e) {
-			console.log(e);
-		}
-		if (finalResults.length > MAX_RESULTS)
-			finalResults.length = MAX_RESULTS;
-		response.success(finalResults);
+	queryBlocks().find().then(function(blockList) {
+		Parse.Promise.when(promises).then(function(results) {
+			var finalResults = [];
+			try {
+				_.each(results, function accum(r) { finalResults = finalResults.concat(r) });
+				finalResults = _.filter(finalResults, function(post) { return _.where(blockList, {toPost: post }).length == 0 } );
+				finalResults = _.sortBy(_.uniq(finalResults, function (a) { return a.id }), function(a) { return a.get("fromRollAt") || a.get("createdAt") }).reverse();
+			}
+			catch (e) {
+				console.log(e);
+			}
+			if (finalResults.length > MAX_RESULTS)
+				finalResults.length = MAX_RESULTS;
+			response.success(finalResults);
+		});
 	});
 });
