@@ -12,6 +12,7 @@ var http = require('http');
 var mail = require('./Mailgun.js');
 var bodyParser = require('body-parser');
 var request = require('request');
+var user = require('./util/user.js');
 
 mail.initialize('sandbox4ba3cd71927a419db74f6a84e97973f6.mailgun.org', 'key-f7f17e392715c4328b9274a4557d08a5');
 
@@ -124,7 +125,7 @@ app.get('/install/:userid/:type/:contentid', function(request, response) {
 	  var title = content == null ? "This item has been deleted" : (content == "" ? "" : content.get("title"))
 	  if (imageField == null)
 	    title = ""
-	  if (typeof title == 'undefined')
+	  if (typeof title == 'undefined') 
 	  	title = ""
 	  var imageurl = content == null ? "/assets/empty-content.png" : content.get(imageField).url()
 		response.render('install', { user: userName, userimageurl: userPhoto, what: request.params.type, imageurl: imageurl, title: title, launchparams: request.params.userid + "/" + request.params.type + "/" + request.params.contentid });
@@ -140,7 +141,7 @@ app.get('/install/:userid/:type/:contentid', function(request, response) {
 	  if (user != null) {
       userObj = user
       userName = user.get("name")
-      if (userName == "")
+      if (typeof userName == "undefined")
         userName = user.get("username")
       try {
         userPhoto = user.get("profilePhoto").url()
@@ -282,19 +283,35 @@ app.get('/admin/fix_counts', function(request, response) {
 });
 
 // scans all rows in a class and calls back for each one that was created by a deleted user
-function scan(className, callback) {
-	var str = "Class: " + className + " ";
+function scan(className, userFieldName, deleteFlag, callback) {
+	var str = "";
 	var classToScan = Parse.Object.extend(className);
 	var query = new Parse.Query(classToScan);
-	query.include("createdBy");
+	query.include(userFieldName);
+	var count = 0;
 	query.each(function(result) {
-		console.log(result.id + " ");
-		if (result.createdBy != nil)
-			str += result.id + " *** ";		
-	}).then(function() {callback(str)}).catch(function() { callback("***ERROR***")});
+		if (typeof result.get(userFieldName) == 'undefined') {
+		  count++
+			str += result.id + "<br>";
+			if (deleteFlag) {
+        user.getObject(className, result.id, function(obj) {
+          obj.destroy({
+            success: function() {
+            },
+            error: function() {
+            }
+          });
+        });
+			}
+		}
+	}).then(function() {callback("Class: " + className + "(" + count + ")<br>" + str + "<br>")}).catch(function() { callback("***ERROR***<br>")});
 }
 
 app.get('/admin/list_orphans', function(request, response) {
+  scanOrphans(response, false);
+});
+
+function scanOrphans(response, deleteFlag) {
 	var rowList = "";
 	var count = 0;
 	function accum(str) {
@@ -303,18 +320,17 @@ app.get('/admin/list_orphans', function(request, response) {
 			response.render('admindone', { msg: rowList });
 	}
 	Parse.Cloud.useMasterKey();
-	scan("Post", accum);
-	scan("Follow", accum);
-	scan("Album", accum);
-	scan("Like", accum);
-	scan("Comment", accum);
-	scan("Notification", accum);
-	scan("Log", accum);
-});
+	scan("Post", "createdBy", deleteFlag, accum);
+	scan("Follow", "from", deleteFlag, accum);
+	scan("Album", "createdBy", deleteFlag, accum);
+	scan("Like", "createdBy", deleteFlag, accum);
+	scan("Comment", "createdBy", deleteFlag, accum);
+	scan("Notification", "from", deleteFlag, accum);
+	scan("Log", "createdBy", deleteFlag, accum);
+}
 
 app.get('/admin/fix_orphans', function(request, response) {
-	Parse.Cloud.useMasterKey();
-	response.render('admindone', { msg: "" });
+  scanOrphans(response, true);	
 });
 
 //////////////////////////////////////

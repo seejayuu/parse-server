@@ -6,9 +6,8 @@ Parse.Cloud.define("findPoppoUsers", function(request, response) {
 	query.find({
 		success: function(results) {
 			var emails = {};
-			// pull out just the user object ID and the email address to make the most compact response
 			for (var i = 0; i < results.length; i++) {
-				emails[results[i].get("email")] = results[i].id
+				emails[results[i].get("email")] = results[i]
 			}
 			response.success(emails)
 		},
