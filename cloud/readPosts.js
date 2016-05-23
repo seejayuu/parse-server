@@ -72,7 +72,7 @@ Parse.Cloud.define("readPosts", function(request, response) {
       if (retval == null)
         retval = obj.get("to");
     }
-	  return retval == null ? null : retval.id;
+	  return retval == null ? obj : retval.id;
   }	  
 	
 	// get the albums/groups that the current user has posted
