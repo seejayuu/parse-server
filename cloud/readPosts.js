@@ -67,15 +67,12 @@ Parse.Cloud.define("readPosts", function(request, response) {
     var retval = obj;
     if (obj.className == "Follow") {
       retval = obj.get("toAlbumGroup");
-      console.log(JSON.stringify(retval));
-      /*
       if (retval == null)
         retval = obj.get("toPost");
       if (retval == null)
         retval = obj.get("to");
-      */
     }
-	  return retval.id;
+	  return retval == null ? null : retval.id;
   }	  
 	
 	// get the albums/groups that the current user has posted
