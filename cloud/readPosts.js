@@ -66,8 +66,8 @@ Parse.Cloud.define("readPosts", function(request, response) {
       return null;
     var retval = obj;
     if (obj.className == "Follow") {
-      /*
       retval = obj.get("toAlbumGroup");
+      /*
       if (retval == null)
         retval = obj.get("toPost");
       if (retval == null)
