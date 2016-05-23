@@ -88,8 +88,7 @@ Parse.Cloud.define("newUser", function(request, response) {
 				worldACL.setPublicWriteAccess(true);
 				follow.setACL(worldACL);
 				follow.set("type", "ag");
-				follow.set("from", owner);
-				follow.set("to", thisUser);
+				follow.set("from", thisUser);
 				follow.set("toAlbumGroup", group);
 				console.log("Sharing group: " + group.get("title"));
 				follow.save();
