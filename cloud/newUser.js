@@ -192,9 +192,9 @@ function getAlbumSubset(roll) {
 			var choice = Math.floor((Math.random() * albums.length));
 			if (albums[choice].length >= ALBUM_SIZE_THRESHOLD) {
 				subset.push(albums[choice]);
+			}
 				albums.splice(choice, 1);
 				count--;
-			}
 		}
 		console.log(JSON.stringify(subset));
 		return subset;
