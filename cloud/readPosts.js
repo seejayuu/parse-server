@@ -61,6 +61,20 @@ Parse.Cloud.define("readPosts", function(request, response) {
 		return blockQuery.find();
 	}
 	
+	function followTarget(obj) {
+    if (obj == null)
+      return null;
+    var retval = obj;
+    if (obj.className == "Follow") {
+      retval = obj.get("toAlbumGroup")
+      if (retval == null)
+        retval = obj.get("toPost")
+      if (retval == null)
+        retval = obj.get("to")
+    }
+	  return retval.id;
+  }	  
+	
 	// get the albums/groups that the current user has posted
 	function queryPost3() {
 		var query = getQuery("Follow");
@@ -83,7 +97,7 @@ Parse.Cloud.define("readPosts", function(request, response) {
 			try {
 				_.each(results, function accum(r) { finalResults = finalResults.concat(r) });
 				finalResults = _.filter(finalResults, function(post) { return _.filter(blockList, function (i) { return i.get("toPost").id == post.id }).length == 0 } );
-				finalResults = _.sortBy(_.uniq(finalResults, function (a) { return a.id }), function(a) { return a.get("fromRollAt") || a.get("createdAt") }).reverse();
+				finalResults = _.sortBy(_.uniq(finalResults, function (a) { return followTarget(a) }), function(a) { return a.get("fromRollAt") || a.get("createdAt") }).reverse();
 			}
 			catch (e) {
 				console.log(e);
