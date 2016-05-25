@@ -7,7 +7,7 @@
 var debug = true
 
 var express = require('express');
-var compression = require('compression');
+//var compression = require('compression');
 //var app = express();		// now runs off the parse-server express instance
 var http = require('http');
 var mail = require('./Mailgun.js');
@@ -29,7 +29,7 @@ app.get('/', function(request, response) {
 	response.render('home', { id: "" });
 });
 
-app.use(compression());
+//app.use(compression());
 app.use(express.static('public'));
 
 //////////////////////////////////////
