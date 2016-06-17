@@ -1,3 +1,7 @@
+// searchAll.js
+//
+// Cloud function that searches all Posts, Albums, Groups and Users for a term
+
 var _ = require("underscore");
 
 Parse.Cloud.define("searchAll", function(request, response) {
@@ -24,11 +28,15 @@ Parse.Cloud.define("searchAll", function(request, response) {
 			query.equalTo("createdBy", user).matches("title", "(?i)" + probe).matches("title", "(?i)" + probe);
 			return query.find();
 		}
+		// search all tags and then see which posts contain those tags
 		var tagQuery = getQuery("Tag");
 		tagQuery.matches("name", "(?i)" + probe)
-		//promises.push(tagQuery);		//TODO: This isn't right. Must find posts that contain these tags
+    var postQuery = getQuery("Post");
+
+    promises.push(Parse.Promise.when(tagQuery).then({ function(results) { return postQuery.containedIn("tags", results).find() } }));
 		promises.push(queryPostField("title"));
 		promises.push(queryPostField("notes"));
+		
 	}
 	if (filter == Scope.All || filter == Scope.Albums || filter == Scope.Groups) {
 		// search groups and albums
@@ -43,6 +51,18 @@ Parse.Cloud.define("searchAll", function(request, response) {
 		if (filter != Scope.Groups) {
 			promises.push(queryAlbumGroupField("album", "title"));
 			promises.push(queryAlbumGroupField("album", "notes"));
+			// search album titles and notes that have been shared with the current user
+			var followQuery = getQuery("Follow");
+			followQuery.equalTo("type", "ag").equalTo("to", user);
+      // following line needs to do the regex match
+      var re = new RegExp("(?i)");
+			promises.push(followQuery.find().then(function(results) { 
+			  return _.map(results, function(item) {
+			    return item.get("toAlbumGroup")
+			  }).filter(function(item) {
+			      return re.test(item.get("title")) || re.test(item.get("notes"))
+			  }) 
+			}));
 		}
 		if (filter != Scope.Albums) {
 			promises.push(queryAlbumGroupField("group", "title"));

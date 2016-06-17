@@ -1,19 +1,26 @@
 // Takes an array of email addresses and returns a dictionary of email addresses that are already poppo users
+// excludes users that the current user is already following
 Parse.Cloud.define("findPoppoUsers", function(request, response) {
-	var query = new Parse.Query('_User');
-	query.containedIn("email", request.params.emailaddresses);
-	query.limit = 1000;
-	query.find({
-		success: function(results) {
-			var emails = {};
-			for (var i = 0; i < results.length; i++) {
-				emails[results[i].get("email")] = results[i]
-			}
-			response.success(emails)
-		},
-		error: function(error) {
-			response.error(error)
-		}
+  var followQuery = new Parse.Query("Follow");
+  followQuery.equalTo("from", request.user).equalTo("type", "user")
+  followQuery.find().then( function(result) {
+  	var query = new Parse.Query('_User');
+	  query.containedIn("email", request.params.emailaddresses);
+	  query.limit = 1000;
+	  query.find({
+		  success: function(results) {
+			  var emails = {};
+			  var followIds = _.map(results, function(item) { return item.id });
+			  for (var i = 0; i < results.length; i++) {
+			    if !_.find(followIds, function(id) { return id == results[i].id })
+				    emails[results[i].get("email")] = results[i];
+			  }
+			  response.success(emails)
+		  },
+		  error: function(error) {
+			  response.error(error)
+		  }
+	  });
 	});
 });
 
