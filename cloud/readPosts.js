@@ -36,13 +36,14 @@ Parse.Cloud.define("readPosts", function(request, response) {
 			}
 		});
 	}
-	//get the albums and groups posted by users the current user is following
+	//get the albums and groups posted by users the current user is following and by the current user
 	function queryPost2a() {
 		var userQuery = getQuery("Follow");
 		userQuery.equalTo("type", "user").equalTo("from", user).include("to");
 		return userQuery.find().then(function(results) {
 			try {
 				var postingUsers = _.filter(results, function(a) { return typeof(a.get("to")) != "undefined"} ).map(function(b) { return b.get("to")});
+				postingUsers.push(user)
 				var followQuery = getQuery("Follow");
 				followQuery.notEqualTo("type", "user").containedIn("from", postingUsers)
 				followQuery.include("toAlbumGroup").include("toPost").include("toPost.createdBy").include("toAlbumGroup.createdBy");
@@ -73,23 +74,22 @@ Parse.Cloud.define("readPosts", function(request, response) {
         retval = obj.get("to");
     }
 	  return retval == null ? obj : retval.id;
-  }	  
+  }
+  	function getId(obj, field) {
+  		if (obj == undefined)
+  			return "";
+  		var obj2 = obj.get(field);
+  		if (obj2 == undefined)
+  			return "";
+  		return obj2.id;
+  	}
 	
-	// get the albums/groups that the current user has posted
-	function queryPost3() {
-		var query = getQuery("Follow");
-		query.include("toAlbumGroup").include("toPost").include("toPost.createdBy").include("toAlbumGroup.createdBy");
-		query.notEqualTo("type", "user").equalTo("from", user).equalTo("to", user);
-		return query.find();
-	}
 	promises.push(queryPost1());
 	if (!inProfile) {
 		// get posts for users the current user is following
 		promises.push(queryPost2());
 		//get the albums and groups posted by users the current user is following
 		promises.push(queryPost2a());
-		// get the albums/groups that the current user has posted
-		promises.push(queryPost3());
 	}
 	queryBlocks().then(function(blockList) {
 		Parse.Promise.when(promises).then(function(results) {
@@ -97,6 +97,8 @@ Parse.Cloud.define("readPosts", function(request, response) {
 			try {
 				_.each(results, function accum(r) { finalResults = finalResults.concat(r) });
 				finalResults = _.filter(finalResults, function(post) { return _.filter(blockList, function (i) { return i.get("toPost").id == post.id }).length == 0 } );
+				// remove any shared albums or groups; leaving just posted albums or groups
+				finalResults = _.filter(finalResults, function(post) { return post.get("type") == "post" || getId(post, "to") == getId(post, "from") } );
 				finalResults = _.sortBy(_.uniq(finalResults, function (a) { return followTarget(a) }), function(a) { return a.get("fromRollAt") || a.get("createdAt") }).reverse();
 			}
 			catch (e) {
